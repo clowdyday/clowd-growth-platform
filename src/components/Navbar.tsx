@@ -8,8 +8,6 @@ import clowdLogo from "@/assets/clowd-logo.png";
 const navLinks = [
   { label: "Services", href: "/services" },
   { label: "Pricing", href: "/pricing" },
-  { label: "Estimate", href: "/estimate" },
-  { label: "Portal", href: "/portal" },
   { label: "About", href: "/about" },
 ];
 
@@ -57,10 +55,10 @@ const Navbar = () => {
           ) : (
             <>
               <Button variant="hero-secondary" size="sm" asChild>
-                <Link to="/estimate">Get Estimate</Link>
+                <Link to="/estimate">Get Started</Link>
               </Button>
               <Button variant="cta" size="sm" asChild>
-                <Link to="/auth">Create Account</Link>
+                <Link to="/dashboard">Dashboard</Link>
               </Button>
             </>
           )}
@@ -101,10 +99,10 @@ const Navbar = () => {
             ) : (
               <>
                 <Button variant="hero-secondary" size="sm" className="flex-1" asChild>
-                  <Link to="/estimate" onClick={() => setMobileOpen(false)}>Get Estimate</Link>
+                  <Link to="/estimate" onClick={() => setMobileOpen(false)}>Get Started</Link>
                 </Button>
                 <Button variant="cta" size="sm" className="flex-1" asChild>
-                  <Link to="/auth" onClick={() => setMobileOpen(false)}>Create Account</Link>
+                  <Link to="/dashboard" onClick={() => setMobileOpen(false)}>Dashboard</Link>
                 </Button>
               </>
             )}

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ArrowLeft, CheckCircle2, Calculator } from "lucide-react";
+import { ArrowRight, ArrowLeft, CheckCircle2, Rocket, Upload } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const industries = [
   "Roofing", "HVAC", "Plumbing", "Electrical", "Concrete",
@@ -11,16 +12,16 @@ const industries = [
 
 const websiteOptions = [
   { id: "none", label: "No Website", price: 0 },
-  { id: "starter", label: "Starter Website", price: 1500, desc: "5-page responsive site" },
-  { id: "growth", label: "Growth Website", price: 3500, desc: "10-page conversion-optimized" },
+  { id: "starter", label: "Starter Website", price: 1000, desc: "5-page responsive site" },
+  { id: "growth", label: "Growth Website", price: 2500, desc: "10-page conversion-optimized" },
   { id: "custom", label: "Custom Website", price: null, desc: "Fully custom build" },
 ];
 
 const organicOptions = [
-  { id: "none", label: "No Organic", price: 0 },
-  { id: "starter", label: "Starter Organic", price: 500, desc: "3 posts/week, 1 channel" },
-  { id: "growth", label: "Growth Organic", price: 1200, desc: "5 posts/week, 2 channels" },
-  { id: "authority", label: "Authority Organic", price: 2500, desc: "Daily posting, 3+ channels" },
+  { id: "none", label: "No Social Management", price: 0 },
+  { id: "starter", label: "Starter Social", price: 50, desc: "3 posts/week, 1 channel" },
+  { id: "growth", label: "Growth Social", price: 250, desc: "5 posts/week, 2 channels" },
+  { id: "authority", label: "Authority Social", price: 100, desc: "Daily posting, 3+ channels" },
 ];
 
 const budgetOptions = [1000, 2500, 5000, 7500, 10000, 15000, 20000];
@@ -28,34 +29,51 @@ const budgetOptions = [1000, 2500, 5000, 7500, 10000, 15000, 20000];
 interface FormData {
   industry: string;
   location: string;
+  companyName: string;
   adBudget: number;
-  needWebsite: boolean;
+  wantAds: boolean;
   websitePackage: string;
-  wantOrganic: boolean;
   organicPackage: string;
+  logoFile: File | null;
+  brandColors: string;
+  notes: string;
 }
 
 const EstimatePage = () => {
   const [step, setStep] = useState(0);
   const [showResults, setShowResults] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [form, setForm] = useState<FormData>({
     industry: "",
     location: "",
+    companyName: "",
     adBudget: 2500,
-    needWebsite: false,
+    wantAds: true,
     websitePackage: "none",
-    wantOrganic: false,
     organicPackage: "none",
+    logoFile: null,
+    brandColors: "",
+    notes: "",
   });
 
-  const totalSteps = 4;
+  const totalSteps = 5;
+
+  const selectedServices = () => {
+    const s: string[] = [];
+    if (form.wantAds) s.push("Ad Management");
+    if (form.websitePackage !== "none") s.push("Website");
+    if (form.organicPackage !== "none") s.push("Social Management");
+    return s;
+  };
 
   const canProceed = () => {
     switch (step) {
-      case 0: return form.industry && form.location;
-      case 1: return form.adBudget > 0;
+      case 0: return form.industry && form.location && form.companyName;
+      case 1: return selectedServices().length > 0;
       case 2: return true;
       case 3: return true;
+      case 4: return true;
       default: return false;
     }
   };
@@ -65,15 +83,15 @@ const EstimatePage = () => {
     else setShowResults(true);
   };
 
-  const adFee = form.adBudget * 0.1;
+  const adFee = form.wantAds ? form.adBudget * 0.1 : 0;
   const webPkg = websiteOptions.find((w) => w.id === form.websitePackage);
   const orgPkg = organicOptions.find((o) => o.id === form.organicPackage);
   const monthlyTotal = adFee + (orgPkg?.price || 0);
   const projectCost = webPkg?.price || 0;
 
   const OptionButton = ({
-    selected, onClick, label, desc,
-  }: { selected: boolean; onClick: () => void; label: string; desc?: string }) => (
+    selected, onClick, label, desc, price,
+  }: { selected: boolean; onClick: () => void; label: string; desc?: string; price?: string }) => (
     <button
       onClick={onClick}
       className={`p-4 rounded-xl border-2 text-left transition-all duration-200 ${
@@ -82,8 +100,13 @@ const EstimatePage = () => {
           : "border-border bg-card hover:border-accent/30"
       }`}
     >
-      <div className="font-semibold text-sm text-foreground">{label}</div>
-      {desc && <div className="text-xs text-muted-foreground mt-1">{desc}</div>}
+      <div className="flex justify-between items-start">
+        <div>
+          <div className="font-semibold text-sm text-foreground">{label}</div>
+          {desc && <div className="text-xs text-muted-foreground mt-1">{desc}</div>}
+        </div>
+        {price && <span className="text-sm font-bold text-accent">{price}</span>}
+      </div>
     </button>
   );
 
@@ -103,18 +126,20 @@ const EstimatePage = () => {
               <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
                 Your Custom Estimate
               </h1>
-              <p className="text-muted-foreground">Based on your selections for a {form.industry} company in {form.location}.</p>
+              <p className="text-muted-foreground">Based on your selections for {form.companyName} — {form.industry} in {form.location}.</p>
             </div>
 
             <div className="glass-card p-8 glow-accent space-y-6">
               {/* Ad Management */}
-              <div className="flex justify-between items-center pb-4 border-b border-border">
-                <div>
-                  <div className="font-semibold text-foreground">Ad Management</div>
-                  <div className="text-sm text-muted-foreground">${form.adBudget.toLocaleString()}/mo ad spend × 10%</div>
+              {form.wantAds && (
+                <div className="flex justify-between items-center pb-4 border-b border-border">
+                  <div>
+                    <div className="font-semibold text-foreground">Ad Management</div>
+                    <div className="text-sm text-muted-foreground">${form.adBudget.toLocaleString()}/mo ad spend × 10%</div>
+                  </div>
+                  <div className="font-display text-xl font-bold text-foreground">${adFee.toLocaleString()}/mo</div>
                 </div>
-                <div className="font-display text-xl font-bold text-foreground">${adFee.toLocaleString()}/mo</div>
-              </div>
+              )}
 
               {/* Website */}
               {form.websitePackage !== "none" && (
@@ -142,10 +167,12 @@ const EstimatePage = () => {
 
               {/* Totals */}
               <div className="bg-muted rounded-xl p-6 space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-semibold text-foreground">Estimated Monthly</span>
-                  <span className="font-display text-2xl font-bold text-accent">${monthlyTotal.toLocaleString()}/mo</span>
-                </div>
+                {monthlyTotal > 0 && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-semibold text-foreground">Estimated Monthly</span>
+                    <span className="font-display text-2xl font-bold text-accent">${monthlyTotal.toLocaleString()}/mo</span>
+                  </div>
+                )}
                 {projectCost > 0 && (
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-semibold text-foreground">One-Time Project Cost</span>
@@ -155,8 +182,13 @@ const EstimatePage = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                <Button variant="hero-primary" size="lg" className="flex-1" asChild>
-                  <Link to="/portal">Create Account & Get Started <ArrowRight className="ml-1" /></Link>
+                <Button
+                  variant="hero-primary"
+                  size="lg"
+                  className="flex-1"
+                  onClick={() => navigate(user ? "/dashboard" : "/auth")}
+                >
+                  {user ? "Go to Dashboard" : "Create Account & Buy Now"} <ArrowRight className="ml-1" />
                 </Button>
                 <Button
                   variant="hero-secondary"
@@ -183,12 +215,12 @@ const EstimatePage = () => {
         >
           <div className="text-center mb-10">
             <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-4">
-              <Calculator className="w-7 h-7 text-accent" />
+              <Rocket className="w-7 h-7 text-accent" />
             </div>
             <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
-              Instant Estimate Calculator
+              Get Started
             </h1>
-            <p className="text-muted-foreground">Get transparent pricing in under 60 seconds. No calls needed.</p>
+            <p className="text-muted-foreground">Tell us about your business and we'll build your custom plan.</p>
           </div>
 
           {/* Progress */}
@@ -215,6 +247,16 @@ const EstimatePage = () => {
                 {step === 0 && (
                   <div className="space-y-6">
                     <h2 className="font-display text-xl font-bold text-foreground">Tell Us About Your Business</h2>
+                    <div>
+                      <label className="text-sm font-semibold text-foreground mb-2 block">Company Name</label>
+                      <input
+                        type="text"
+                        placeholder="Your Company"
+                        value={form.companyName}
+                        onChange={(e) => setForm({ ...form, companyName: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none transition-colors text-sm"
+                      />
+                    </div>
                     <div>
                       <label className="text-sm font-semibold text-foreground mb-2 block">Industry</label>
                       <div className="grid grid-cols-2 gap-2">
@@ -243,6 +285,42 @@ const EstimatePage = () => {
 
                 {step === 1 && (
                   <div className="space-y-6">
+                    <h2 className="font-display text-xl font-bold text-foreground">Select Your Services</h2>
+                    <p className="text-sm text-muted-foreground">Choose one or more services to include in your plan.</p>
+                    <div className="space-y-3">
+                      <OptionButton
+                        selected={form.wantAds}
+                        onClick={() => setForm({ ...form, wantAds: !form.wantAds })}
+                        label="Ad Management"
+                        desc="10% of monthly ad spend"
+                        price="From $100/mo"
+                      />
+                      {websiteOptions.filter(o => o.id !== "none").map((opt) => (
+                        <OptionButton
+                          key={opt.id}
+                          selected={form.websitePackage === opt.id}
+                          onClick={() => setForm({ ...form, websitePackage: form.websitePackage === opt.id ? "none" : opt.id })}
+                          label={opt.label}
+                          desc={opt.desc}
+                          price={opt.price ? `$${opt.price.toLocaleString()}` : "Custom"}
+                        />
+                      ))}
+                      {organicOptions.filter(o => o.id !== "none").map((opt) => (
+                        <OptionButton
+                          key={opt.id}
+                          selected={form.organicPackage === opt.id}
+                          onClick={() => setForm({ ...form, organicPackage: form.organicPackage === opt.id ? "none" : opt.id })}
+                          label={opt.label}
+                          desc={opt.desc}
+                          price={`$${opt.price}/mo`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {step === 2 && form.wantAds && (
+                  <div className="space-y-6">
                     <h2 className="font-display text-xl font-bold text-foreground">Monthly Ad Budget</h2>
                     <p className="text-sm text-muted-foreground">Our management fee is 10% of your monthly ad spend.</p>
                     <div className="grid grid-cols-2 gap-2">
@@ -259,40 +337,74 @@ const EstimatePage = () => {
                   </div>
                 )}
 
-                {step === 2 && (
+                {step === 2 && !form.wantAds && (
                   <div className="space-y-6">
-                    <h2 className="font-display text-xl font-bold text-foreground">Do You Need a Website?</h2>
-                    <div className="grid grid-cols-1 gap-2">
-                      {websiteOptions.map((opt) => (
-                        <OptionButton
-                          key={opt.id}
-                          selected={form.websitePackage === opt.id}
-                          onClick={() =>
-                            setForm({ ...form, websitePackage: opt.id, needWebsite: opt.id !== "none" })
-                          }
-                          label={opt.label}
-                          desc={opt.desc || undefined}
-                        />
-                      ))}
+                    <h2 className="font-display text-xl font-bold text-foreground">Brand Details</h2>
+                    <p className="text-sm text-muted-foreground">Help us understand your brand better.</p>
+                    <div>
+                      <label className="text-sm font-semibold text-foreground mb-2 block">Brand Colors (optional)</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Blue and white, #1a1a1a"
+                        value={form.brandColors}
+                        onChange={(e) => setForm({ ...form, brandColors: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none transition-colors text-sm"
+                      />
                     </div>
                   </div>
                 )}
 
                 {step === 3 && (
                   <div className="space-y-6">
-                    <h2 className="font-display text-xl font-bold text-foreground">Want Organic Social Growth?</h2>
-                    <div className="grid grid-cols-1 gap-2">
-                      {organicOptions.map((opt) => (
-                        <OptionButton
-                          key={opt.id}
-                          selected={form.organicPackage === opt.id}
-                          onClick={() =>
-                            setForm({ ...form, organicPackage: opt.id, wantOrganic: opt.id !== "none" })
-                          }
-                          label={opt.label}
-                          desc={opt.desc || undefined}
-                        />
-                      ))}
+                    <h2 className="font-display text-xl font-bold text-foreground">Upload Your Assets</h2>
+                    <p className="text-sm text-muted-foreground">Upload your logo, photos, or any brand materials. You can also do this later from your dashboard.</p>
+                    <div
+                      className="border-2 border-dashed border-border rounded-xl p-8 text-center cursor-pointer hover:border-accent/40 transition-colors"
+                      onClick={() => document.getElementById("file-upload")?.click()}
+                    >
+                      <Upload className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+                      <p className="text-sm text-muted-foreground">
+                        {form.logoFile ? form.logoFile.name : "Click to upload logo or brand assets"}
+                      </p>
+                      <input
+                        id="file-upload"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => setForm({ ...form, logoFile: e.target.files?.[0] || null })}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-semibold text-foreground mb-2 block">Additional Notes (optional)</label>
+                      <textarea
+                        placeholder="Any specific goals, preferences, or details..."
+                        value={form.notes}
+                        onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                        rows={3}
+                        className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none transition-colors text-sm resize-none"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {step === 4 && (
+                  <div className="space-y-6">
+                    <h2 className="font-display text-xl font-bold text-foreground">Review Your Selections</h2>
+                    <div className="space-y-3">
+                      <div className="p-4 rounded-xl bg-muted">
+                        <div className="text-xs text-muted-foreground mb-1">Company</div>
+                        <div className="font-semibold text-foreground">{form.companyName} — {form.industry}, {form.location}</div>
+                      </div>
+                      <div className="p-4 rounded-xl bg-muted">
+                        <div className="text-xs text-muted-foreground mb-1">Selected Services</div>
+                        <div className="font-semibold text-foreground">{selectedServices().join(", ") || "None"}</div>
+                      </div>
+                      {form.wantAds && (
+                        <div className="p-4 rounded-xl bg-muted">
+                          <div className="text-xs text-muted-foreground mb-1">Ad Budget</div>
+                          <div className="font-semibold text-foreground">${form.adBudget.toLocaleString()}/mo → ${adFee.toLocaleString()}/mo fee</div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}

@@ -105,7 +105,7 @@ const HomePage = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button variant="hero-primary" size="xl" asChild>
-                  <Link to="/estimate">Get Instant Estimate <ArrowRight className="ml-1" /></Link>
+                  <Link to="/estimate">Get Started <ArrowRight className="ml-1" /></Link>
                 </Button>
                 <Button variant="hero-secondary" size="xl" asChild>
                   <Link to="/portal">Create Account</Link>
