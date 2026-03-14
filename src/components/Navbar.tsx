@@ -104,7 +104,7 @@ const Navbar = () => {
                   <Link to="/estimate" onClick={() => setMobileOpen(false)}>Get Started</Link>
                 </Button>
                 <Button variant="cta" size="sm" className="flex-1" asChild>
-                  <Link to="/auth" onClick={() => setMobileOpen(false)}>Dashboard</Link>
+                  <Link to="/auth" onClick={() => setMobileOpen(false)}>Log In</Link>
                 </Button>
               </>
             )}
