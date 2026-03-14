@@ -96,15 +96,13 @@ const AboutPage = () => (
               key={v.title}
               {...fadeUp}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="glass-card-hover p-7 flex gap-5"
+              className="glass-card-hover p-7 text-center"
             >
-              <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center mx-auto mb-4">
                 <v.icon className="w-5 h-5 text-accent" aria-hidden="true" />
               </div>
-              <div>
-                <h3 className="font-display text-lg font-bold text-foreground mb-1">{v.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{v.desc}</p>
-              </div>
+              <h3 className="font-display text-lg font-bold text-foreground mb-1">{v.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">{v.desc}</p>
             </motion.div>
           ))}
         </div>
