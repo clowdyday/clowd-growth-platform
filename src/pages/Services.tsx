@@ -98,40 +98,34 @@ const ServicesPage = () => {
               key={service.title}
               {...fadeUp}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className={`glass-card overflow-hidden relative ${service.featured ? "ring-2 ring-accent/20" : ""}`}
+              className={`glass-card overflow-hidden relative max-w-4xl mx-auto ${service.featured ? "ring-2 ring-accent/20" : ""}`}
             >
               {service.featured && (
                 <span className="absolute top-6 right-6 z-10 text-[10px] font-bold tracking-wider uppercase bg-accent/20 text-accent px-3 py-1 rounded-full backdrop-blur-sm">
                   Core Service
                 </span>
               )}
-              <div className="grid grid-cols-1 lg:grid-cols-5">
-                <div className="lg:col-span-2 h-48 lg:h-auto overflow-hidden">
-                  <img src={service.image} alt={`${service.title} for contractors`} className="w-full h-full object-cover" loading="lazy" />
+              <div className="h-56 overflow-hidden">
+                <img src={service.image} alt={`${service.title} for contractors`} className="w-full h-full object-cover" loading="lazy" />
+              </div>
+              <div className="p-8 md:p-12 text-center">
+                <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-5">
+                  <service.icon className="w-7 h-7 text-accent" aria-hidden="true" />
                 </div>
-                <div className="lg:col-span-3 p-8 md:p-12">
-                  <div className="flex items-start gap-5 mb-6">
-                    <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center shrink-0">
-                      <service.icon className="w-7 h-7 text-accent" aria-hidden="true" />
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-3">{service.title}</h2>
+                <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto mb-8">{service.description}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl mx-auto text-left">
+                  {service.details.map((detail) => (
+                    <div key={detail} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-4 h-4 text-secondary mt-0.5 shrink-0" aria-hidden="true" />
+                      <span className="text-sm text-muted-foreground">{detail}</span>
                     </div>
-                    <div>
-                      <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">{service.title}</h2>
-                      <p className="text-muted-foreground leading-relaxed max-w-2xl">{service.description}</p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {service.details.map((detail) => (
-                      <div key={detail} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-4 h-4 text-secondary mt-0.5 shrink-0" aria-hidden="true" />
-                        <span className="text-sm text-muted-foreground">{detail}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-8">
-                    <Button variant="cta" asChild>
-                      <Link to="/pricing">View Pricing <ArrowRight className="ml-1" /></Link>
-                    </Button>
-                  </div>
+                  ))}
+                </div>
+                <div className="mt-8">
+                  <Button variant="cta" asChild>
+                    <Link to="/pricing">View Pricing <ArrowRight className="ml-1" /></Link>
+                  </Button>
                 </div>
               </div>
             </motion.article>
