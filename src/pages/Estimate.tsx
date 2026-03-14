@@ -101,6 +101,51 @@ const EstimatePage = () => {
   const monthlyTotal = adFee + (orgPkg?.price || 0);
   const projectCost = webPkg?.price || 0;
 
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  const buildLineItems = () => {
+    const items: { priceId: string; recurring: boolean }[] = [];
+    if (form.websitePackage === "starter") items.push({ priceId: PRICE_IDS.website_starter, recurring: false });
+    if (form.websitePackage === "growth") items.push({ priceId: PRICE_IDS.website_growth, recurring: false });
+    if (form.organicPackage === "starter") items.push({ priceId: PRICE_IDS.social_starter, recurring: true });
+    if (form.organicPackage === "growth") items.push({ priceId: PRICE_IDS.social_growth, recurring: true });
+    if (form.organicPackage === "authority") items.push({ priceId: PRICE_IDS.social_authority, recurring: true });
+    return items;
+  };
+
+  const handleCheckout = async () => {
+    if (!user) {
+      // Store estimate data in sessionStorage so we can resume after auth
+      sessionStorage.setItem("pendingEstimate", JSON.stringify(form));
+      navigate("/auth");
+      return;
+    }
+    setCheckoutLoading(true);
+    try {
+      const lineItems = buildLineItems();
+      if (lineItems.length === 0) {
+        toast.error("No purchasable services selected. Ad management requires a custom quote.");
+        setCheckoutLoading(false);
+        return;
+      }
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: {
+          lineItems,
+          successUrl: `${window.location.origin}/dashboard?payment=success`,
+          cancelUrl: `${window.location.origin}/estimate?payment=canceled`,
+        },
+      });
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, "_blank");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to create checkout session");
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
+
   const OptionButton = ({
     selected, onClick, label, desc, price,
   }: { selected: boolean; onClick: () => void; label: string; desc?: string; price?: string }) => (
