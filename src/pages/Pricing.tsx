@@ -44,20 +44,20 @@ const websitePackages = [
 const organicPackages = [
   {
     name: "Starter Social",
-    price: "$50",
+    price: "$250",
     period: "/month",
     features: ["3 posts per week", "Basic content strategy", "Platform: 1 channel", "Monthly performance report", "Stock + branded graphics"],
   },
   {
     name: "Growth Social",
-    price: "$250",
+    price: "$500",
     period: "/month",
     featured: true,
     features: ["5 posts per week", "Content calendar + strategy", "Platforms: 2 channels", "Short-form video content", "Engagement management", "Bi-weekly reporting"],
   },
   {
     name: "Authority Social",
-    price: "$100",
+    price: "$1,000",
     period: "/month",
     features: ["Daily posting", "Full content production", "Platforms: 3+ channels", "Video + photo shoots", "Community management", "Dedicated social strategist", "Weekly reporting"],
   },
