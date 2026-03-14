@@ -54,7 +54,7 @@ const AboutPage = () => (
     {/* Story */}
     <section className="section-padding">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="max-w-3xl mx-auto space-y-6">
+        <div className="max-w-3xl mx-auto space-y-6 text-center">
           <motion.div {...fadeUp}>
             <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-5">
               We Know How Contractors Operate
