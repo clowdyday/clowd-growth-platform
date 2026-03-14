@@ -21,13 +21,13 @@ const adExamples = [
 const websitePackages = [
   {
     name: "Starter Website",
-    price: "$1,500",
+    price: "$1,000",
     period: "one-time",
     features: ["5-page responsive website", "Mobile-optimized design", "Contact form integration", "Basic SEO setup", "1 round of revisions"],
   },
   {
     name: "Growth Website",
-    price: "$3,500",
+    price: "$2,500",
     period: "one-time",
     featured: true,
     features: ["10-page responsive website", "Conversion-optimized layouts", "Advanced SEO setup", "Blog or portfolio section", "Speed optimization", "3 rounds of revisions"],
@@ -42,21 +42,21 @@ const websitePackages = [
 
 const organicPackages = [
   {
-    name: "Starter Organic Growth",
-    price: "$500",
+    name: "Starter Social",
+    price: "$50",
     period: "/month",
     features: ["3 posts per week", "Basic content strategy", "Platform: 1 channel", "Monthly performance report", "Stock + branded graphics"],
   },
   {
-    name: "Growth Organic Package",
-    price: "$1,200",
+    name: "Growth Social",
+    price: "$250",
     period: "/month",
     featured: true,
     features: ["5 posts per week", "Content calendar + strategy", "Platforms: 2 channels", "Short-form video content", "Engagement management", "Bi-weekly reporting"],
   },
   {
-    name: "Authority Organic Package",
-    price: "$2,500",
+    name: "Authority Social",
+    price: "$100",
     period: "/month",
     features: ["Daily posting", "Full content production", "Platforms: 3+ channels", "Video + photo shoots", "Community management", "Dedicated social strategist", "Weekly reporting"],
   },
@@ -182,13 +182,13 @@ const PricingPage = () => (
       </div>
       <div className="container mx-auto px-4 md:px-6 text-center relative">
         <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-5">
-          Get Your Custom Estimate
+          Ready to Get Started?
         </h2>
         <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
-          Use our calculator to see exactly what your marketing investment looks like.
+          Select your services, get a transparent estimate, and start growing your business today.
         </p>
         <Button variant="hero-primary" size="xl" asChild>
-          <Link to="/estimate">Get Instant Estimate <ArrowRight className="ml-1" /></Link>
+          <Link to="/estimate">Get Started <ArrowRight className="ml-1" /></Link>
         </Button>
       </div>
     </section>
