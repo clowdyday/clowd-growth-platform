@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import clowdLogo from "@/assets/clowd-logo.png";
 
 const navLinks = [
@@ -15,6 +16,11 @@ const navLinks = [
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
+
+  // Don't show navbar on dashboard routes
+  if (location.pathname.startsWith("/dashboard")) return null;
+  if (location.pathname === "/auth") return null;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
@@ -44,12 +50,20 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <Button variant="hero-secondary" size="sm" asChild>
-            <Link to="/estimate">Get Estimate</Link>
-          </Button>
-          <Button variant="cta" size="sm" asChild>
-            <Link to="/portal">Create Account</Link>
-          </Button>
+          {user ? (
+            <Button variant="cta" size="sm" asChild>
+              <Link to="/dashboard">Dashboard</Link>
+            </Button>
+          ) : (
+            <>
+              <Button variant="hero-secondary" size="sm" asChild>
+                <Link to="/estimate">Get Estimate</Link>
+              </Button>
+              <Button variant="cta" size="sm" asChild>
+                <Link to="/auth">Create Account</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -80,12 +94,20 @@ const Navbar = () => {
             </Link>
           ))}
           <div className="flex gap-3 pt-3">
-            <Button variant="hero-secondary" size="sm" className="flex-1" asChild>
-              <Link to="/estimate" onClick={() => setMobileOpen(false)}>Get Estimate</Link>
-            </Button>
-            <Button variant="cta" size="sm" className="flex-1" asChild>
-              <Link to="/portal" onClick={() => setMobileOpen(false)}>Create Account</Link>
-            </Button>
+            {user ? (
+              <Button variant="cta" size="sm" className="flex-1" asChild>
+                <Link to="/dashboard" onClick={() => setMobileOpen(false)}>Dashboard</Link>
+              </Button>
+            ) : (
+              <>
+                <Button variant="hero-secondary" size="sm" className="flex-1" asChild>
+                  <Link to="/estimate" onClick={() => setMobileOpen(false)}>Get Estimate</Link>
+                </Button>
+                <Button variant="cta" size="sm" className="flex-1" asChild>
+                  <Link to="/auth" onClick={() => setMobileOpen(false)}>Create Account</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       )}
