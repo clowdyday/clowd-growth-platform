@@ -5,15 +5,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import type { ClientService } from "@/pages/DashboardLayout";
 import type { Tables } from "@/integrations/supabase/types";
-import { Globe, CheckCircle2, Circle, Layout, Palette, Code, Rocket } from "lucide-react";
-
-const onboardingSteps = [
-  { key: "business_info", label: "Business Information", desc: "Company details, services, and service areas" },
-  { key: "brand_assets", label: "Brand Assets", desc: "Upload your logo, brand colors, and photos" },
-  { key: "content_copy", label: "Content & Copy", desc: "Provide text, bios, testimonials, and key messaging" },
-  { key: "design_preferences", label: "Design Preferences", desc: "Choose style direction and reference examples" },
-  { key: "review_launch", label: "Review & Launch", desc: "Final review and go-live approval" },
-];
+import { Globe, Layout, Palette, Code, Rocket } from "lucide-react";
+import { OnboardingForm } from "@/components/onboarding/OnboardingForm";
+import { websiteOnboardingSteps } from "@/components/onboarding/onboardingConfigs";
 
 const WebsiteDashboard = () => {
   const { services } = useOutletContext<{ services: ClientService[] }>();
@@ -43,27 +37,10 @@ const WebsiteDashboard = () => {
     );
   }
 
-  const completedSteps = onboarding.filter((s) => s.completed).length;
   const isOnboarding = service.status === "onboarding";
 
-  const handleCompleteStep = async (stepKey: string) => {
-    if (!user || !service) return;
-    const existing = onboarding.find((o) => o.step_key === stepKey);
-    if (existing) {
-      await supabase.from("service_onboarding").update({ completed: true }).eq("id", existing.id);
-      setOnboarding(onboarding.map((o) => o.id === existing.id ? { ...o, completed: true } : o));
-    } else {
-      const { data } = await supabase.from("service_onboarding").insert({
-        user_id: user.id,
-        service_id: service.id,
-        step_key: stepKey,
-        completed: true,
-      }).select().single();
-      if (data) setOnboarding([...onboarding, data]);
-    }
-    if (completedSteps + 1 >= onboardingSteps.length) {
-      await supabase.from("client_services").update({ status: "active" }).eq("id", service.id);
-    }
+  const handleAllComplete = async () => {
+    await supabase.from("client_services").update({ status: "active" }).eq("id", service.id);
   };
 
   return (
@@ -96,35 +73,14 @@ const WebsiteDashboard = () => {
       )}
 
       {isOnboarding && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="font-display text-lg font-bold text-foreground">Onboarding Progress</h2>
-            <span className="text-sm text-muted-foreground">{completedSteps}/{onboardingSteps.length} complete</span>
-          </div>
-          <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
-            <div className="h-full bg-secondary rounded-full transition-all duration-500" style={{ width: `${(completedSteps / onboardingSteps.length) * 100}%` }} />
-          </div>
-          <div className="space-y-3">
-            {onboardingSteps.map((step, i) => {
-              const completed = onboarding.some((o) => o.step_key === step.key && o.completed);
-              return (
-                <button
-                  key={step.key}
-                  onClick={() => !completed && handleCompleteStep(step.key)}
-                  className={`w-full glass-card p-5 flex items-center gap-4 text-left transition-all ${completed ? "opacity-60" : "hover:border-secondary/30 cursor-pointer"}`}
-                  disabled={completed}
-                >
-                  {completed ? <CheckCircle2 className="w-5 h-5 text-green-400 shrink-0" /> : <Circle className="w-5 h-5 text-muted-foreground shrink-0" />}
-                  <div>
-                    <div className="font-semibold text-sm text-foreground">{step.label}</div>
-                    <div className="text-xs text-muted-foreground">{step.desc}</div>
-                  </div>
-                  <span className="ml-auto text-xs text-muted-foreground">Step {i + 1}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <OnboardingForm
+          steps={websiteOnboardingSteps}
+          serviceId={service.id}
+          onboarding={onboarding}
+          setOnboarding={setOnboarding}
+          onAllComplete={handleAllComplete}
+          accentClass="bg-secondary"
+        />
       )}
 
       <div className="space-y-4">

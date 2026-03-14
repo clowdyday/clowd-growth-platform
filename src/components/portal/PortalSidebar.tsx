@@ -2,6 +2,7 @@ import { useLocation, Link } from "react-router-dom";
 import { NavLink } from "@/components/NavLink";
 import clowdLogo from "@/assets/clowd-logo.png";
 import type { ClientService } from "@/pages/DashboardLayout";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import {
   Sidebar,
   SidebarContent,
@@ -16,7 +17,7 @@ import {
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboard, BarChart3, Globe, TrendingUp,
-  FolderOpen, Settings, LogOut, Plus,
+  FolderOpen, Settings, LogOut, Shield,
 } from "lucide-react";
 
 const serviceConfig = {
@@ -34,8 +35,7 @@ export function PortalSidebar({ services, onSignOut }: PortalSidebarProps) {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
-
-  const isActive = (path: string) => location.pathname.startsWith(path);
+  const { isAdmin } = useIsAdmin();
 
   return (
     <Sidebar collapsible="icon" className="border-r border-border">
@@ -57,12 +57,7 @@ export function PortalSidebar({ services, onSignOut }: PortalSidebarProps) {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink
-                    to="/dashboard"
-                    end
-                    className="hover:bg-muted/50"
-                    activeClassName="bg-muted text-foreground font-medium"
-                  >
+                  <NavLink to="/dashboard" end className="hover:bg-muted/50" activeClassName="bg-muted text-foreground font-medium">
                     <LayoutDashboard className="mr-2 h-4 w-4" />
                     {!collapsed && <span>Dashboard</span>}
                   </NavLink>
@@ -82,11 +77,7 @@ export function PortalSidebar({ services, onSignOut }: PortalSidebarProps) {
                   return (
                     <SidebarMenuItem key={service.id}>
                       <SidebarMenuButton asChild>
-                        <NavLink
-                          to={config.path}
-                          className="hover:bg-muted/50"
-                          activeClassName="bg-muted text-foreground font-medium"
-                        >
+                        <NavLink to={config.path} className="hover:bg-muted/50" activeClassName="bg-muted text-foreground font-medium">
                           <config.icon className={`mr-2 h-4 w-4 ${config.color}`} />
                           {!collapsed && (
                             <div className="flex items-center justify-between flex-1">
@@ -118,11 +109,7 @@ export function PortalSidebar({ services, onSignOut }: PortalSidebarProps) {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink
-                    to="/dashboard/assets"
-                    className="hover:bg-muted/50"
-                    activeClassName="bg-muted text-foreground font-medium"
-                  >
+                  <NavLink to="/dashboard/assets" className="hover:bg-muted/50" activeClassName="bg-muted text-foreground font-medium">
                     <FolderOpen className="mr-2 h-4 w-4" />
                     {!collapsed && <span>Assets</span>}
                   </NavLink>
@@ -130,11 +117,7 @@ export function PortalSidebar({ services, onSignOut }: PortalSidebarProps) {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink
-                    to="/dashboard/settings"
-                    className="hover:bg-muted/50"
-                    activeClassName="bg-muted text-foreground font-medium"
-                  >
+                  <NavLink to="/dashboard/settings" className="hover:bg-muted/50" activeClassName="bg-muted text-foreground font-medium">
                     <Settings className="mr-2 h-4 w-4" />
                     {!collapsed && <span>Settings</span>}
                   </NavLink>
@@ -146,6 +129,15 @@ export function PortalSidebar({ services, onSignOut }: PortalSidebarProps) {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-border p-3">
+        {isAdmin && (
+          <Link
+            to="/admin"
+            className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-destructive hover:bg-destructive/10 transition-colors mb-1"
+          >
+            <Shield className="h-4 w-4" />
+            {!collapsed && <span>Admin Panel</span>}
+          </Link>
+        )}
         <button
           onClick={onSignOut}
           className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"

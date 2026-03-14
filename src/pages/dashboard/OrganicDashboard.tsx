@@ -5,15 +5,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import type { ClientService } from "@/pages/DashboardLayout";
 import type { Tables } from "@/integrations/supabase/types";
-import { TrendingUp, CheckCircle2, Circle, Calendar, Hash, Eye, Heart } from "lucide-react";
-
-const onboardingSteps = [
-  { key: "brand_voice", label: "Brand Voice & Tone", desc: "Define how your brand should sound on social media" },
-  { key: "platforms", label: "Platform Selection", desc: "Choose which social platforms to focus on" },
-  { key: "content_pillars", label: "Content Pillars", desc: "Define key topics and themes for your content" },
-  { key: "visual_assets", label: "Visual Assets", desc: "Upload project photos, team photos, and brand materials" },
-  { key: "posting_schedule", label: "Posting Schedule", desc: "Set your preferred posting frequency and times" },
-];
+import { TrendingUp, Calendar, Hash, Eye, Heart } from "lucide-react";
+import { OnboardingForm } from "@/components/onboarding/OnboardingForm";
+import { organicOnboardingSteps } from "@/components/onboarding/onboardingConfigs";
 
 const OrganicDashboard = () => {
   const { services } = useOutletContext<{ services: ClientService[] }>();
@@ -43,27 +37,10 @@ const OrganicDashboard = () => {
     );
   }
 
-  const completedSteps = onboarding.filter((s) => s.completed).length;
   const isOnboarding = service.status === "onboarding";
 
-  const handleCompleteStep = async (stepKey: string) => {
-    if (!user || !service) return;
-    const existing = onboarding.find((o) => o.step_key === stepKey);
-    if (existing) {
-      await supabase.from("service_onboarding").update({ completed: true }).eq("id", existing.id);
-      setOnboarding(onboarding.map((o) => o.id === existing.id ? { ...o, completed: true } : o));
-    } else {
-      const { data } = await supabase.from("service_onboarding").insert({
-        user_id: user.id,
-        service_id: service.id,
-        step_key: stepKey,
-        completed: true,
-      }).select().single();
-      if (data) setOnboarding([...onboarding, data]);
-    }
-    if (completedSteps + 1 >= onboardingSteps.length) {
-      await supabase.from("client_services").update({ status: "active" }).eq("id", service.id);
-    }
+  const handleAllComplete = async () => {
+    await supabase.from("client_services").update({ status: "active" }).eq("id", service.id);
   };
 
   return (
@@ -96,35 +73,14 @@ const OrganicDashboard = () => {
       )}
 
       {isOnboarding && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="font-display text-lg font-bold text-foreground">Onboarding Progress</h2>
-            <span className="text-sm text-muted-foreground">{completedSteps}/{onboardingSteps.length} complete</span>
-          </div>
-          <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
-            <div className="h-full bg-green-400 rounded-full transition-all duration-500" style={{ width: `${(completedSteps / onboardingSteps.length) * 100}%` }} />
-          </div>
-          <div className="space-y-3">
-            {onboardingSteps.map((step, i) => {
-              const completed = onboarding.some((o) => o.step_key === step.key && o.completed);
-              return (
-                <button
-                  key={step.key}
-                  onClick={() => !completed && handleCompleteStep(step.key)}
-                  className={`w-full glass-card p-5 flex items-center gap-4 text-left transition-all ${completed ? "opacity-60" : "hover:border-green-400/30 cursor-pointer"}`}
-                  disabled={completed}
-                >
-                  {completed ? <CheckCircle2 className="w-5 h-5 text-green-400 shrink-0" /> : <Circle className="w-5 h-5 text-muted-foreground shrink-0" />}
-                  <div>
-                    <div className="font-semibold text-sm text-foreground">{step.label}</div>
-                    <div className="text-xs text-muted-foreground">{step.desc}</div>
-                  </div>
-                  <span className="ml-auto text-xs text-muted-foreground">Step {i + 1}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <OnboardingForm
+          steps={organicOnboardingSteps}
+          serviceId={service.id}
+          onboarding={onboarding}
+          setOnboarding={setOnboarding}
+          onAllComplete={handleAllComplete}
+          accentClass="bg-green-400"
+        />
       )}
 
       <div className="space-y-4">
