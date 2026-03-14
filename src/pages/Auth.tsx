@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -24,14 +25,35 @@ const AuthPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    const trimmedEmail = email.trim();
+    const trimmedName = fullName.trim();
+
+    if (!trimmedEmail) {
+      setError("Email is required.");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+    if (!isLogin && !trimmedName) {
+      setError("Full name is required.");
+      return;
+    }
+    if (!isLogin && trimmedName.length > 100) {
+      setError("Name must be under 100 characters.");
+      return;
+    }
+
     setLoading(true);
 
     if (isLogin) {
-      const { error } = await signIn(email, password);
+      const { error } = await signIn(trimmedEmail, password);
       if (error) setError(error.message);
       else navigate("/dashboard");
     } else {
-      const { error } = await signUp(email, password, fullName);
+      const { error } = await signUp(trimmedEmail, password, trimmedName);
       if (error) setError(error.message);
       else setOtpStep(true);
     }
@@ -40,9 +62,10 @@ const AuthPage = () => {
 
   const handleVerifyOtp = async () => {
     setError("");
+    if (otpCode.length < 6) return;
     setLoading(true);
     const { error } = await supabase.auth.verifyOtp({
-      email,
+      email: email.trim(),
       token: otpCode,
       type: "signup",
     });
@@ -69,13 +92,17 @@ const AuthPage = () => {
   if (otpStep) {
     return (
       <div className="gradient-hero min-h-screen flex items-center justify-center px-4">
+        <Helmet>
+          <title>Verify Email — Clowd Marketing</title>
+          <meta name="robots" content="noindex" />
+        </Helmet>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="glass-card p-10 max-w-md w-full text-center"
         >
-          <img src={clowdLogo} alt="Clowd" className="h-12 w-12 mx-auto mb-4" />
-          <h2 className="font-display text-2xl font-bold text-foreground mb-3">Verify Your Email</h2>
+          <img src={clowdLogo} alt="Clowd Marketing" className="h-12 w-12 mx-auto mb-4" width={48} height={48} />
+          <h1 className="font-display text-2xl font-bold text-foreground mb-3">Verify Your Email</h1>
           <p className="text-muted-foreground text-sm mb-6">
             We sent a 6-digit code to <strong className="text-foreground">{email}</strong>. Enter it below to verify your account.
           </p>
@@ -92,7 +119,7 @@ const AuthPage = () => {
             </InputOTP>
           </div>
           {error && (
-            <p className="text-sm text-destructive bg-destructive/10 rounded-lg px-4 py-2 mb-4">{error}</p>
+            <p className="text-sm text-destructive bg-destructive/10 rounded-lg px-4 py-2 mb-4" role="alert">{error}</p>
           )}
           <Button variant="cta" size="lg" className="w-full" onClick={handleVerifyOtp} disabled={loading || otpCode.length < 6}>
             {loading ? "Verifying..." : "Verify & Continue"}
@@ -111,6 +138,11 @@ const AuthPage = () => {
 
   return (
     <div className="gradient-hero min-h-screen flex items-center justify-center px-4">
+      <Helmet>
+        <title>{isLogin ? "Sign In" : "Create Account"} — Clowd Marketing</title>
+        <meta name="description" content={isLogin ? "Sign in to your Clowd Marketing client portal." : "Create your Clowd Marketing account and start growing your business."} />
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -118,7 +150,7 @@ const AuthPage = () => {
       >
         <div className="text-center mb-8">
           <Link to="/">
-            <img src={clowdLogo} alt="Clowd" className="h-12 w-12 mx-auto mb-4" />
+            <img src={clowdLogo} alt="Clowd Marketing" className="h-12 w-12 mx-auto mb-4" width={48} height={48} />
           </Link>
           <h1 className="font-display text-2xl font-bold text-foreground">
             {isLogin ? "Welcome Back" : "Create Your Account"}
@@ -135,8 +167,9 @@ const AuthPage = () => {
           className="w-full mb-4"
           onClick={handleGoogleSignIn}
           disabled={loading}
+          type="button"
         >
-          <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" aria-hidden="true">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
@@ -151,46 +184,55 @@ const AuthPage = () => {
           <div className="h-px flex-1 bg-border" />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           {!isLogin && (
             <div>
-              <label className="text-sm font-semibold text-foreground mb-1.5 block">Full Name</label>
+              <label htmlFor="fullName" className="text-sm font-semibold text-foreground mb-1.5 block">Full Name</label>
               <input
+                id="fullName"
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
+                maxLength={100}
                 placeholder="John Smith"
+                autoComplete="name"
                 className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none transition-colors text-sm"
               />
             </div>
           )}
           <div>
-            <label className="text-sm font-semibold text-foreground mb-1.5 block">Email</label>
+            <label htmlFor="email" className="text-sm font-semibold text-foreground mb-1.5 block">Email</label>
             <input
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              maxLength={255}
               placeholder="you@company.com"
+              autoComplete="email"
               className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none transition-colors text-sm"
             />
           </div>
           <div>
-            <label className="text-sm font-semibold text-foreground mb-1.5 block">Password</label>
+            <label htmlFor="password" className="text-sm font-semibold text-foreground mb-1.5 block">Password</label>
             <input
+              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="••••••••"
               minLength={6}
+              maxLength={128}
+              autoComplete={isLogin ? "current-password" : "new-password"}
               className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none transition-colors text-sm"
             />
           </div>
 
           {error && (
-            <p className="text-sm text-destructive bg-destructive/10 rounded-lg px-4 py-2">{error}</p>
+            <p className="text-sm text-destructive bg-destructive/10 rounded-lg px-4 py-2" role="alert">{error}</p>
           )}
 
           <Button variant="cta" size="lg" className="w-full" type="submit" disabled={loading}>
@@ -204,6 +246,7 @@ const AuthPage = () => {
           <button
             onClick={() => { setIsLogin(!isLogin); setError(""); }}
             className="text-accent font-semibold hover:underline"
+            type="button"
           >
             {isLogin ? "Sign Up" : "Sign In"}
           </button>

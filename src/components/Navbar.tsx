@@ -16,15 +16,14 @@ const Navbar = () => {
   const location = useLocation();
   const { user } = useAuth();
 
-  // Don't show navbar on dashboard routes
   if (location.pathname.startsWith("/dashboard")) return null;
   if (location.pathname === "/auth") return null;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border" role="navigation" aria-label="Main navigation">
       <div className="container mx-auto flex items-center justify-between h-16 px-4 md:px-6">
-        <Link to="/" className="flex items-center gap-2">
-          <img src={clowdLogo} alt="Clowd Marketing" className="h-8 w-8" />
+        <Link to="/" className="flex items-center gap-2" aria-label="Clowd Marketing home">
+          <img src={clowdLogo} alt="" className="h-8 w-8" width={32} height={32} aria-hidden="true" />
           <span className="font-display text-xl font-bold tracking-tight text-foreground">
             Clowd<span className="text-accent">.</span>
           </span>
@@ -58,7 +57,7 @@ const Navbar = () => {
                 <Link to="/estimate">Get Started</Link>
               </Button>
               <Button variant="cta" size="sm" asChild>
-                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/auth">Dashboard</Link>
               </Button>
             </>
           )}
@@ -69,6 +68,7 @@ const Navbar = () => {
           className="md:hidden p-2 text-foreground"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
+          aria-expanded={mobileOpen}
         >
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
@@ -102,7 +102,7 @@ const Navbar = () => {
                   <Link to="/estimate" onClick={() => setMobileOpen(false)}>Get Started</Link>
                 </Button>
                 <Button variant="cta" size="sm" className="flex-1" asChild>
-                  <Link to="/dashboard" onClick={() => setMobileOpen(false)}>Dashboard</Link>
+                  <Link to="/auth" onClick={() => setMobileOpen(false)}>Dashboard</Link>
                 </Button>
               </>
             )}

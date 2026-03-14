@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,7 @@ const servicesData = [
     image: serviceWebsite,
     description: "Clean, modern, high-converting websites built specifically for blue-collar businesses. Every site is optimized for trust, speed, and mobile performance.",
     details: [
-      "Multiple packages: Starter, Growth, and Custom",
+      "Multiple packages: Starter ($1,000), Growth ($2,500), and Custom",
       "Designed for conversion — not just aesthetics",
       "Mobile-responsive and fast-loading",
       "Built with trust signals, CTAs, and local SEO",
@@ -52,7 +53,7 @@ const servicesData = [
     image: serviceSocial,
     description: "Build your brand and local authority through strategic organic social media. Position yourself as the contractor people trust before they even call.",
     details: [
-      "Short-form content strategy and planning",
+      "Packages starting at $50/month",
       "Educational and trust-building content",
       "Consistent posting schedules",
       "Account management and engagement",
@@ -65,6 +66,12 @@ const servicesData = [
 const ServicesPage = () => {
   return (
     <div>
+      <Helmet>
+        <title>Services — Ad Management, Websites & Social Media | Clowd Marketing</title>
+        <meta name="description" content="Clowd Marketing offers ad management, website creation, and organic social media growth for contractors. See our full service details and start today." />
+        <link rel="canonical" href="https://clowdmarketing.com/services" />
+      </Helmet>
+
       {/* Hero */}
       <section className="gradient-hero pt-32 pb-20 md:pt-40 md:pb-24 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
@@ -87,7 +94,7 @@ const ServicesPage = () => {
       <section className="section-padding">
         <div className="container mx-auto px-4 md:px-6 space-y-16">
           {servicesData.map((service, i) => (
-            <motion.div
+            <motion.article
               key={service.title}
               {...fadeUp}
               transition={{ duration: 0.5, delay: i * 0.1 }}
@@ -100,12 +107,12 @@ const ServicesPage = () => {
               )}
               <div className="grid grid-cols-1 lg:grid-cols-5">
                 <div className="lg:col-span-2 h-48 lg:h-auto overflow-hidden">
-                  <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
+                  <img src={service.image} alt={`${service.title} for contractors`} className="w-full h-full object-cover" loading="lazy" />
                 </div>
                 <div className="lg:col-span-3 p-8 md:p-12">
                   <div className="flex items-start gap-5 mb-6">
                     <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center shrink-0">
-                      <service.icon className="w-7 h-7 text-accent" />
+                      <service.icon className="w-7 h-7 text-accent" aria-hidden="true" />
                     </div>
                     <div>
                       <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">{service.title}</h2>
@@ -115,7 +122,7 @@ const ServicesPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {service.details.map((detail) => (
                       <div key={detail} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-4 h-4 text-secondary mt-0.5 shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-secondary mt-0.5 shrink-0" aria-hidden="true" />
                         <span className="text-sm text-muted-foreground">{detail}</span>
                       </div>
                     ))}
@@ -127,7 +134,7 @@ const ServicesPage = () => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
         </div>
       </section>
@@ -139,13 +146,13 @@ const ServicesPage = () => {
         </div>
         <div className="container mx-auto px-4 md:px-6 text-center relative">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-5">
-            See What It Would Cost
+            Ready to Get Started?
           </h2>
           <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
-            Use our instant estimate calculator to get transparent pricing in under 60 seconds.
+            Select your services, get transparent pricing, and start growing your business today.
           </p>
           <Button variant="hero-primary" size="xl" asChild>
-            <Link to="/estimate">Get Instant Estimate <ArrowRight className="ml-1" /></Link>
+            <Link to="/estimate">Get Started <ArrowRight className="ml-1" /></Link>
           </Button>
         </div>
       </section>

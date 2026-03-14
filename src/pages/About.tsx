@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,12 @@ const values = [
 
 const AboutPage = () => (
   <div>
+    <Helmet>
+      <title>About Clowd Marketing — Marketing Agency for Contractors</title>
+      <meta name="description" content="Clowd Marketing specializes in ad management, websites, and social media for blue-collar businesses. Learn about our approach and why contractors trust us." />
+      <link rel="canonical" href="https://clowdmarketing.com/about" />
+    </Helmet>
+
     {/* Hero */}
     <section className="gradient-hero pt-32 pb-20 md:pt-40 md:pb-24 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -92,7 +99,7 @@ const AboutPage = () => (
               className="glass-card-hover p-7 flex gap-5"
             >
               <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
-                <v.icon className="w-5 h-5 text-accent" />
+                <v.icon className="w-5 h-5 text-accent" aria-hidden="true" />
               </div>
               <div>
                 <h3 className="font-display text-lg font-bold text-foreground mb-1">{v.title}</h3>
@@ -118,10 +125,10 @@ const AboutPage = () => (
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button variant="hero-primary" size="xl" asChild>
-            <Link to="/estimate">Get Instant Estimate <ArrowRight className="ml-1" /></Link>
+            <Link to="/estimate">Get Started <ArrowRight className="ml-1" /></Link>
           </Button>
           <Button variant="hero-secondary" size="xl" asChild>
-            <Link to="/portal">Create Account</Link>
+            <Link to="/auth">Create Account</Link>
           </Button>
         </div>
       </div>

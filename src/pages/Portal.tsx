@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,12 @@ const portalFeatures = [
 
 const PortalPage = () => (
   <div>
+    <Helmet>
+      <title>Client Portal — Manage Your Marketing Dashboard | Clowd</title>
+      <meta name="description" content="Access your Clowd Marketing client portal to onboard, upload assets, track progress, and view deliverables — all in one dashboard built for contractors." />
+      <link rel="canonical" href="https://clowdmarketing.com/portal" />
+    </Helmet>
+
     {/* Hero */}
     <section className="gradient-hero pt-32 pb-20 md:pt-40 md:pb-24 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -40,7 +47,7 @@ const PortalPage = () => (
             Onboard, upload assets, view your strategy, and track progress — all from a single dashboard built for contractors.
           </p>
           <Button variant="hero-primary" size="xl" asChild>
-            <Link to="/portal">Create Your Account <ArrowRight className="ml-1" /></Link>
+            <Link to="/auth">Create Your Account <ArrowRight className="ml-1" /></Link>
           </Button>
         </motion.div>
       </div>
@@ -63,7 +70,7 @@ const PortalPage = () => (
               className="glass-card-hover p-7"
             >
               <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center mb-4">
-                <f.icon className="w-5 h-5 text-accent" />
+                <f.icon className="w-5 h-5 text-accent" aria-hidden="true" />
               </div>
               <h3 className="font-display text-lg font-bold text-foreground mb-2">{f.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
@@ -98,7 +105,7 @@ const PortalPage = () => (
             {["Website Draft Ready for Review", "Ad Campaign — Week 2 Report", "Social Content Calendar — March"].map(
               (item) => (
                 <div key={item} className="flex items-center gap-3 p-4 bg-card rounded-xl border border-border">
-                  <LayoutDashboard className="w-4 h-4 text-accent shrink-0" />
+                  <LayoutDashboard className="w-4 h-4 text-accent shrink-0" aria-hidden="true" />
                   <span className="text-sm font-medium text-foreground">{item}</span>
                   <span className="ml-auto text-xs text-muted-foreground">View →</span>
                 </div>
@@ -123,10 +130,10 @@ const PortalPage = () => (
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button variant="hero-primary" size="xl" asChild>
-            <Link to="/portal">Create Account <ArrowRight className="ml-1" /></Link>
+            <Link to="/auth">Create Account <ArrowRight className="ml-1" /></Link>
           </Button>
           <Button variant="hero-secondary" size="xl" asChild>
-            <Link to="/estimate">Get Estimate First</Link>
+            <Link to="/estimate">Get Started</Link>
           </Button>
         </div>
       </div>
