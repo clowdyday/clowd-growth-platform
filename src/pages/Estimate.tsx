@@ -244,9 +244,16 @@ const EstimatePage = () => {
                   variant="hero-primary"
                   size="lg"
                   className="flex-1"
-                  onClick={() => navigate(user ? "/dashboard" : "/auth")}
+                  onClick={handleCheckout}
+                  disabled={checkoutLoading}
                 >
-                  {user ? "Go to Dashboard" : "Create Account & Buy Now"} <ArrowRight className="ml-1" />
+                  {checkoutLoading ? (
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Processing...</>
+                  ) : user ? (
+                    <>Buy Now <ArrowRight className="ml-1" /></>
+                  ) : (
+                    <>Create Account & Buy Now <ArrowRight className="ml-1" /></>
+                  )}
                 </Button>
                 <Button
                   variant="hero-secondary"
