@@ -50,7 +50,7 @@ const organicPackages = [
   },
   {
     name: "Growth Social",
-    price: "$500",
+    price: "$250",
     period: "/month",
     featured: true,
     features: ["5 posts per week", "Content calendar + strategy", "Platforms: 2 channels", "Short-form video content", "Engagement management", "Bi-weekly reporting"],
