@@ -183,13 +183,13 @@ const HomePage = () => {
                 <div className="h-44 overflow-hidden">
                   <img src={service.image} alt={`${service.title} service for contractors`} className="w-full h-full object-cover" loading="lazy" />
                 </div>
-                <div className="p-8">
+                <div className="p-8 text-center">
                   {service.featured && (
                     <span className="absolute top-4 right-4 text-[10px] font-bold tracking-wider uppercase bg-accent/20 text-accent px-3 py-1 rounded-full backdrop-blur-sm">
                       Core Service
                     </span>
                   )}
-                  <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-5">
+                  <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mx-auto mb-5">
                     <service.icon className="w-6 h-6 text-accent" aria-hidden="true" />
                   </div>
                   <h3 className="font-display text-xl font-bold text-foreground mb-3">{service.title}</h3>
