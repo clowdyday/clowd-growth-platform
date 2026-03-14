@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import SectionHeading from "@/components/SectionHeading";
-import heroVisual from "@/assets/hero-visual.png";
 import serviceAds from "@/assets/service-ads.png";
 import serviceWebsite from "@/assets/service-website.png";
 import serviceSocial from "@/assets/service-social.png";
@@ -10,7 +10,7 @@ import {
   BarChart3, Globe, TrendingUp, ClipboardList, Lightbulb,
   Upload, LayoutDashboard, Wrench, Zap, Thermometer,
   Droplets, Plug, Building2, TreePine, HardHat, Sun,
-  ShieldCheck, MessageSquare, Eye, Layers, ArrowRight, Star
+  MessageSquare, Eye, Layers, ArrowRight, Star
 } from "lucide-react";
 
 const fadeUp = {
@@ -73,12 +73,59 @@ const testimonials = [
   { name: "James L.", company: "ProLine Plumbing", text: "The estimate calculator sold me instantly. Transparent pricing and fast onboarding.", rating: 5 },
 ];
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Clowd Marketing",
+  "description": "Marketing systems for contractors — ad management, website creation, and organic social media growth.",
+  "url": "https://clowdmarketing.com",
+  "serviceType": ["Ad Management", "Website Creation", "Social Media Management"],
+  "areaServed": "US",
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "Contractors and Blue-Collar Businesses"
+  },
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Ad Management",
+      "description": "10% of monthly ad spend",
+      "priceCurrency": "USD"
+    },
+    {
+      "@type": "Offer",
+      "name": "Starter Website",
+      "price": "1000",
+      "priceCurrency": "USD"
+    },
+    {
+      "@type": "Offer",
+      "name": "Growth Website",
+      "price": "2500",
+      "priceCurrency": "USD"
+    }
+  ]
+};
+
 const HomePage = () => {
   return (
     <div>
+      <Helmet>
+        <title>Clowd Marketing — Ads, Websites & Social Media for Contractors</title>
+        <meta name="description" content="Clowd Marketing helps contractors grow with ad management, website creation, and organic social media. Get transparent pricing and start in 60 seconds." />
+        <link rel="canonical" href="https://clowdmarketing.com" />
+        <meta property="og:title" content="Clowd Marketing — Marketing Systems for Contractors" />
+        <meta property="og:description" content="Ads, websites, and social media built for blue-collar businesses. Get transparent pricing and a custom strategy." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://clowdmarketing.com" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Clowd Marketing — Marketing for Contractors" />
+        <meta name="twitter:description" content="Ad management, websites, and social media built for blue-collar businesses." />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Helmet>
+
       {/* Hero */}
       <section className="gradient-hero relative overflow-hidden min-h-screen flex items-center">
-        {/* Abstract cloud layers */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 -left-40 w-[600px] h-[600px] rounded-full bg-accent/5 blur-3xl" />
           <div className="absolute -top-20 right-0 w-[500px] h-[500px] rounded-full bg-accent/10 blur-3xl opacity-40" />
@@ -86,50 +133,37 @@ const HomePage = () => {
         </div>
 
         <div className="container mx-auto px-4 md:px-6 pt-32 pb-24 md:pt-40 md:pb-32 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7 }}
-            >
-              <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">
-                Marketing Systems for Contractors
-              </span>
-              <h1 className="font-display text-4xl md:text-6xl font-bold text-foreground leading-[1.1] mb-6">
-                More Leads. Better Visibility.{" "}
-                <span className="text-gradient">Less Hassle.</span>
-              </h1>
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-10 max-w-xl">
-                Ads, websites, and social media built for blue-collar businesses.
-                Get strategy, pricing, and onboarding — without wasting time on sales calls.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button variant="hero-primary" size="xl" asChild>
-                  <Link to="/estimate">Get Started <ArrowRight className="ml-1" /></Link>
-                </Button>
-                <Button variant="hero-secondary" size="xl" asChild>
-                  <Link to="/portal">Create Account</Link>
-                </Button>
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="hidden lg:block"
-            >
-              <img
-                src={heroVisual}
-                alt="Cloud-inspired marketing ecosystem"
-                className="w-full rounded-3xl glow-accent"
-              />
-            </motion.div>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="max-w-3xl mx-auto text-center"
+          >
+            <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">
+              Marketing Systems for Contractors
+            </span>
+            <h1 className="font-display text-4xl md:text-6xl font-bold text-foreground leading-[1.1] mb-6">
+              More Leads. Better Visibility.{" "}
+              <span className="text-gradient">Less Hassle.</span>
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-10 max-w-xl mx-auto">
+              Ads, websites, and social media built for blue-collar businesses.
+              Get strategy, pricing, and onboarding — without wasting time on sales calls.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button variant="hero-primary" size="xl" asChild>
+                <Link to="/estimate">Get Started <ArrowRight className="ml-1" /></Link>
+              </Button>
+              <Button variant="hero-secondary" size="xl" asChild>
+                <Link to="/auth">Create Account</Link>
+              </Button>
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Services */}
-      <section className="section-padding">
+      <section className="section-padding" aria-labelledby="services-heading">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeading
             label="What We Do"
@@ -138,7 +172,7 @@ const HomePage = () => {
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {services.map((service, i) => (
-              <motion.div
+              <motion.article
                 key={service.title}
                 {...fadeUp}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
@@ -147,7 +181,7 @@ const HomePage = () => {
                 }`}
               >
                 <div className="h-44 overflow-hidden">
-                  <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
+                  <img src={service.image} alt={`${service.title} service for contractors`} className="w-full h-full object-cover" loading="lazy" />
                 </div>
                 <div className="p-8">
                   {service.featured && (
@@ -156,19 +190,19 @@ const HomePage = () => {
                     </span>
                   )}
                   <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-5">
-                    <service.icon className="w-6 h-6 text-accent" />
+                    <service.icon className="w-6 h-6 text-accent" aria-hidden="true" />
                   </div>
                   <h3 className="font-display text-xl font-bold text-foreground mb-3">{service.title}</h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">{service.description}</p>
                 </div>
-              </motion.div>
+              </motion.article>
             ))}
           </div>
         </div>
       </section>
 
       {/* How It Works */}
-      <section className="section-padding bg-muted/30">
+      <section className="section-padding bg-muted/30" aria-labelledby="how-it-works-heading">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeading
             label="How It Works"
@@ -184,7 +218,7 @@ const HomePage = () => {
                 className="text-center"
               >
                 <div className="w-16 h-16 rounded-2xl bg-card border border-border flex items-center justify-center mx-auto mb-5">
-                  <step.icon className="w-7 h-7 text-accent" />
+                  <step.icon className="w-7 h-7 text-accent" aria-hidden="true" />
                 </div>
                 <div className="text-xs font-bold text-accent mb-2">Step {i + 1}</div>
                 <h3 className="font-display text-lg font-bold text-foreground mb-2">{step.title}</h3>
@@ -196,7 +230,7 @@ const HomePage = () => {
       </section>
 
       {/* Industries */}
-      <section className="section-padding">
+      <section className="section-padding" aria-labelledby="industries-heading">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeading
             label="Who We Help"
@@ -211,7 +245,7 @@ const HomePage = () => {
                 transition={{ duration: 0.4, delay: i * 0.05 }}
                 className="glass-card p-5 text-center"
               >
-                <ind.icon className="w-7 h-7 text-secondary mx-auto mb-3" />
+                <ind.icon className="w-7 h-7 text-secondary mx-auto mb-3" aria-hidden="true" />
                 <span className="text-sm font-semibold text-foreground">{ind.label}</span>
               </motion.div>
             ))}
@@ -220,7 +254,7 @@ const HomePage = () => {
       </section>
 
       {/* Differentiators */}
-      <section className="section-padding bg-muted/30">
+      <section className="section-padding bg-muted/30" aria-labelledby="why-clowd-heading">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeading
             label="Why Clowd"
@@ -236,7 +270,7 @@ const HomePage = () => {
                 className="glass-card-hover p-7 flex gap-5"
               >
                 <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
-                  <d.icon className="w-5 h-5 text-accent" />
+                  <d.icon className="w-5 h-5 text-accent" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="font-display text-lg font-bold text-foreground mb-1">{d.title}</h3>
@@ -249,7 +283,7 @@ const HomePage = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="section-padding">
+      <section className="section-padding" aria-labelledby="testimonials-heading">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeading
             label="What Clients Say"
@@ -257,23 +291,23 @@ const HomePage = () => {
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {testimonials.map((t, i) => (
-              <motion.div
+              <motion.blockquote
                 key={t.name}
                 {...fadeUp}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="glass-card p-7"
               >
-                <div className="flex gap-1 mb-4">
+                <div className="flex gap-1 mb-4" aria-label={`${t.rating} out of 5 stars`}>
                   {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} className="w-4 h-4 fill-accent text-accent" />
+                    <Star key={j} className="w-4 h-4 fill-accent text-accent" aria-hidden="true" />
                   ))}
                 </div>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-5">"{t.text}"</p>
-                <div>
+                <footer>
                   <div className="font-semibold text-foreground text-sm">{t.name}</div>
                   <div className="text-xs text-muted-foreground">{t.company}</div>
-                </div>
-              </motion.div>
+                </footer>
+              </motion.blockquote>
             ))}
           </div>
         </div>
@@ -297,7 +331,7 @@ const HomePage = () => {
                 <Link to="/estimate">Get Started <ArrowRight className="ml-1" /></Link>
               </Button>
               <Button variant="hero-secondary" size="xl" asChild>
-                <Link to="/portal">Create Account</Link>
+                <Link to="/auth">Create Account</Link>
               </Button>
             </div>
           </motion.div>

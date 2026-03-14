@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -69,7 +70,7 @@ const EstimatePage = () => {
 
   const canProceed = () => {
     switch (step) {
-      case 0: return form.industry && form.location && form.companyName;
+      case 0: return form.industry && form.location.trim() && form.companyName.trim();
       case 1: return selectedServices().length > 0;
       case 2: return true;
       case 3: return true;
@@ -93,6 +94,7 @@ const EstimatePage = () => {
     selected, onClick, label, desc, price,
   }: { selected: boolean; onClick: () => void; label: string; desc?: string; price?: string }) => (
     <button
+      type="button"
       onClick={onClick}
       className={`p-4 rounded-xl border-2 text-left transition-all duration-200 ${
         selected
@@ -113,6 +115,10 @@ const EstimatePage = () => {
   if (showResults) {
     return (
       <div className="gradient-hero min-h-screen pt-32 pb-20">
+        <Helmet>
+          <title>Your Estimate — Clowd Marketing</title>
+          <meta name="robots" content="noindex" />
+        </Helmet>
         <div className="container mx-auto px-4 md:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -121,7 +127,7 @@ const EstimatePage = () => {
           >
             <div className="text-center mb-10">
               <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-5">
-                <CheckCircle2 className="w-8 h-8 text-accent" />
+                <CheckCircle2 className="w-8 h-8 text-accent" aria-hidden="true" />
               </div>
               <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
                 Your Custom Estimate
@@ -130,7 +136,6 @@ const EstimatePage = () => {
             </div>
 
             <div className="glass-card p-8 glow-accent space-y-6">
-              {/* Ad Management */}
               {form.wantAds && (
                 <div className="flex justify-between items-center pb-4 border-b border-border">
                   <div>
@@ -141,7 +146,6 @@ const EstimatePage = () => {
                 </div>
               )}
 
-              {/* Website */}
               {form.websitePackage !== "none" && (
                 <div className="flex justify-between items-center pb-4 border-b border-border">
                   <div>
@@ -154,7 +158,6 @@ const EstimatePage = () => {
                 </div>
               )}
 
-              {/* Organic */}
               {form.organicPackage !== "none" && (
                 <div className="flex justify-between items-center pb-4 border-b border-border">
                   <div>
@@ -165,7 +168,6 @@ const EstimatePage = () => {
                 </div>
               )}
 
-              {/* Totals */}
               <div className="bg-muted rounded-xl p-6 space-y-3">
                 {monthlyTotal > 0 && (
                   <div className="flex justify-between items-center">
@@ -207,6 +209,11 @@ const EstimatePage = () => {
 
   return (
     <div className="gradient-hero min-h-screen pt-32 pb-20">
+      <Helmet>
+        <title>Get Started — Build Your Marketing Plan | Clowd Marketing</title>
+        <meta name="description" content="Select your services, tell us about your business, and get a transparent estimate in under 60 seconds. No calls needed." />
+        <link rel="canonical" href="https://clowdmarketing.com/estimate" />
+      </Helmet>
       <div className="container mx-auto px-4 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -215,7 +222,7 @@ const EstimatePage = () => {
         >
           <div className="text-center mb-10">
             <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-4">
-              <Rocket className="w-7 h-7 text-accent" />
+              <Rocket className="w-7 h-7 text-accent" aria-hidden="true" />
             </div>
             <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
               Get Started
@@ -224,7 +231,7 @@ const EstimatePage = () => {
           </div>
 
           {/* Progress */}
-          <div className="flex gap-2 mb-8">
+          <div className="flex gap-2 mb-8" role="progressbar" aria-valuenow={step + 1} aria-valuemin={1} aria-valuemax={totalSteps}>
             {Array.from({ length: totalSteps }).map((_, i) => (
               <div
                 key={i}
@@ -248,12 +255,14 @@ const EstimatePage = () => {
                   <div className="space-y-6">
                     <h2 className="font-display text-xl font-bold text-foreground">Tell Us About Your Business</h2>
                     <div>
-                      <label className="text-sm font-semibold text-foreground mb-2 block">Company Name</label>
+                      <label htmlFor="companyName" className="text-sm font-semibold text-foreground mb-2 block">Company Name</label>
                       <input
+                        id="companyName"
                         type="text"
                         placeholder="Your Company"
                         value={form.companyName}
                         onChange={(e) => setForm({ ...form, companyName: e.target.value })}
+                        maxLength={100}
                         className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none transition-colors text-sm"
                       />
                     </div>
@@ -271,12 +280,14 @@ const EstimatePage = () => {
                       </div>
                     </div>
                     <div>
-                      <label className="text-sm font-semibold text-foreground mb-2 block">Location</label>
+                      <label htmlFor="location" className="text-sm font-semibold text-foreground mb-2 block">Location</label>
                       <input
+                        id="location"
                         type="text"
                         placeholder="City, State"
                         value={form.location}
                         onChange={(e) => setForm({ ...form, location: e.target.value })}
+                        maxLength={100}
                         className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none transition-colors text-sm"
                       />
                     </div>
@@ -342,12 +353,14 @@ const EstimatePage = () => {
                     <h2 className="font-display text-xl font-bold text-foreground">Brand Details</h2>
                     <p className="text-sm text-muted-foreground">Help us understand your brand better.</p>
                     <div>
-                      <label className="text-sm font-semibold text-foreground mb-2 block">Brand Colors (optional)</label>
+                      <label htmlFor="brandColors" className="text-sm font-semibold text-foreground mb-2 block">Brand Colors (optional)</label>
                       <input
+                        id="brandColors"
                         type="text"
                         placeholder="e.g. Blue and white, #1a1a1a"
                         value={form.brandColors}
                         onChange={(e) => setForm({ ...form, brandColors: e.target.value })}
+                        maxLength={100}
                         className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none transition-colors text-sm"
                       />
                     </div>
@@ -361,8 +374,11 @@ const EstimatePage = () => {
                     <div
                       className="border-2 border-dashed border-border rounded-xl p-8 text-center cursor-pointer hover:border-accent/40 transition-colors"
                       onClick={() => document.getElementById("file-upload")?.click()}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") document.getElementById("file-upload")?.click(); }}
                     >
-                      <Upload className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+                      <Upload className="w-10 h-10 text-muted-foreground mx-auto mb-3" aria-hidden="true" />
                       <p className="text-sm text-muted-foreground">
                         {form.logoFile ? form.logoFile.name : "Click to upload logo or brand assets"}
                       </p>
@@ -375,12 +391,14 @@ const EstimatePage = () => {
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-semibold text-foreground mb-2 block">Additional Notes (optional)</label>
+                      <label htmlFor="notes" className="text-sm font-semibold text-foreground mb-2 block">Additional Notes (optional)</label>
                       <textarea
+                        id="notes"
                         placeholder="Any specific goals, preferences, or details..."
                         value={form.notes}
                         onChange={(e) => setForm({ ...form, notes: e.target.value })}
                         rows={3}
+                        maxLength={1000}
                         className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none transition-colors text-sm resize-none"
                       />
                     </div>
@@ -416,10 +434,11 @@ const EstimatePage = () => {
                 variant="ghost"
                 onClick={() => setStep(Math.max(0, step - 1))}
                 disabled={step === 0}
+                type="button"
               >
                 <ArrowLeft className="mr-1" /> Back
               </Button>
-              <Button variant="cta" onClick={handleNext} disabled={!canProceed()}>
+              <Button variant="cta" onClick={handleNext} disabled={!canProceed()} type="button">
                 {step === totalSteps - 1 ? "See My Estimate" : "Continue"} <ArrowRight className="ml-1" />
               </Button>
             </div>

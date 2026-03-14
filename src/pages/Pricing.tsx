@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -62,12 +63,20 @@ const organicPackages = [
   },
 ];
 
+const pricingJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Pricing — Clowd Marketing",
+  "description": "Transparent pricing for contractor marketing services. Ad management at 10% of ad spend, websites from $1,000, social media from $50/month.",
+  "url": "https://clowdmarketing.com/pricing"
+};
+
 const PackageCard = ({
   name, price, period, features, featured, delay,
 }: {
   name: string; price: string; period: string; features: string[]; featured?: boolean; delay: number;
 }) => (
-  <motion.div
+  <motion.article
     {...fadeUp}
     transition={{ duration: 0.5, delay }}
     className={`glass-card-hover p-8 flex flex-col ${featured ? "ring-2 ring-accent/20 relative" : ""}`}
@@ -85,7 +94,7 @@ const PackageCard = ({
     <ul className="space-y-3 mb-8 flex-1">
       {features.map((f) => (
         <li key={f} className="flex items-start gap-2.5 text-sm text-muted-foreground">
-          <CheckCircle2 className="w-4 h-4 text-secondary mt-0.5 shrink-0" />
+          <CheckCircle2 className="w-4 h-4 text-secondary mt-0.5 shrink-0" aria-hidden="true" />
           {f}
         </li>
       ))}
@@ -93,11 +102,18 @@ const PackageCard = ({
     <Button variant={featured ? "cta" : "cta-outline"} asChild>
       <Link to="/estimate">Get Started <ArrowRight className="ml-1" /></Link>
     </Button>
-  </motion.div>
+  </motion.article>
 );
 
 const PricingPage = () => (
   <div>
+    <Helmet>
+      <title>Pricing — Transparent Marketing Costs for Contractors | Clowd</title>
+      <meta name="description" content="See our transparent pricing: ad management at 10% of spend, websites from $1,000, social media from $50/month. No hidden fees, no contracts." />
+      <link rel="canonical" href="https://clowdmarketing.com/pricing" />
+      <script type="application/ld+json">{JSON.stringify(pricingJsonLd)}</script>
+    </Helmet>
+
     {/* Hero */}
     <section className="gradient-hero pt-32 pb-20 md:pt-40 md:pb-24 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -117,7 +133,7 @@ const PricingPage = () => (
     </section>
 
     {/* Ad Management Pricing */}
-    <section className="section-padding">
+    <section className="section-padding" aria-labelledby="ad-pricing">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeading
           label="Ad Management"
@@ -144,7 +160,7 @@ const PricingPage = () => (
     </section>
 
     {/* Website Packages */}
-    <section className="section-padding bg-muted/30">
+    <section className="section-padding bg-muted/30" aria-labelledby="website-pricing">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeading
           label="Websites"
@@ -160,7 +176,7 @@ const PricingPage = () => (
     </section>
 
     {/* Organic Packages */}
-    <section className="section-padding">
+    <section className="section-padding" aria-labelledby="social-pricing">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeading
           label="Organic Growth"
