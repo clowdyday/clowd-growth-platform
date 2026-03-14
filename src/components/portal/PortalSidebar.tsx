@@ -73,7 +73,7 @@ export function PortalSidebar({ services, onSignOut }: PortalSidebarProps) {
         </SidebarGroup>
 
         {services.length > 0 && (
-          <SidebarGroup defaultOpen>
+          <SidebarGroup>
             <SidebarGroupLabel>My Services</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
