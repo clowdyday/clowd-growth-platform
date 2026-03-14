@@ -19,8 +19,15 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const [otpStep, setOtpStep] = useState(false);
   const [otpCode, setOtpCode] = useState("");
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect to dashboard if already authenticated (e.g. after OAuth callback)
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user, authLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
