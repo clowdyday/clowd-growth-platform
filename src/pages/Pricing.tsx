@@ -77,9 +77,9 @@ const PackageCard = ({
         Most Popular
       </span>
     )}
-    <h3 className="font-display text-xl font-bold text-primary mb-1">{name}</h3>
+    <h3 className="font-display text-xl font-bold text-foreground mb-1">{name}</h3>
     <div className="mb-5">
-      <span className="font-display text-3xl font-bold text-primary">{price}</span>
+      <span className="font-display text-3xl font-bold text-foreground">{price}</span>
       <span className="text-sm text-muted-foreground ml-1">{period}</span>
     </div>
     <ul className="space-y-3 mb-8 flex-1">
@@ -99,11 +99,14 @@ const PackageCard = ({
 const PricingPage = () => (
   <div>
     {/* Hero */}
-    <section className="gradient-hero pt-32 pb-20 md:pt-40 md:pb-24">
-      <div className="container mx-auto px-4 md:px-6 text-center">
+    <section className="gradient-hero pt-32 pb-20 md:pt-40 md:pb-24 relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-20 left-1/3 w-[500px] h-[500px] rounded-full bg-accent/5 blur-3xl" />
+      </div>
+      <div className="container mx-auto px-4 md:px-6 text-center relative">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">Pricing</span>
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-primary mb-5">
+          <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-5">
             Transparent Pricing. No Surprises.
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -130,7 +133,7 @@ const PricingPage = () => (
               className="glass-card p-6 text-center"
             >
               <div className="text-sm text-muted-foreground mb-1">Ad Spend</div>
-              <div className="font-display text-lg font-bold text-primary mb-3">{ex.spend}</div>
+              <div className="font-display text-lg font-bold text-foreground mb-3">{ex.spend}</div>
               <div className="text-xs text-muted-foreground mb-1">Management Fee</div>
               <div className="font-display text-2xl font-bold text-accent">{ex.fee}</div>
               <div className="text-xs text-muted-foreground">/month</div>
@@ -141,7 +144,7 @@ const PricingPage = () => (
     </section>
 
     {/* Website Packages */}
-    <section className="section-padding bg-muted/50">
+    <section className="section-padding bg-muted/30">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeading
           label="Websites"
@@ -175,13 +178,13 @@ const PricingPage = () => (
     {/* CTA */}
     <section className="section-padding gradient-dark relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-1/4 w-[400px] h-[400px] rounded-full bg-accent/5 blur-3xl" />
+        <div className="absolute top-0 right-1/4 w-[400px] h-[400px] rounded-full bg-accent/8 blur-3xl" />
       </div>
       <div className="container mx-auto px-4 md:px-6 text-center relative">
-        <h2 className="font-display text-3xl md:text-4xl font-bold text-primary-foreground mb-5">
+        <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-5">
           Get Your Custom Estimate
         </h2>
-        <p className="text-primary-foreground/60 text-lg mb-8 max-w-xl mx-auto">
+        <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
           Use our calculator to see exactly what your marketing investment looks like.
         </p>
         <Button variant="hero-primary" size="xl" asChild>

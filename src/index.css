@@ -6,24 +6,24 @@
 
 @layer base {
   :root {
-    /* Clowd Marketing Design System */
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
+    /* Clowd Marketing — Dark Premium Theme */
+    --background: 222 47% 6%;
+    --foreground: 210 40% 92%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card: 222 40% 9%;
+    --card-foreground: 210 40% 92%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover: 222 40% 9%;
+    --popover-foreground: 210 40% 92%;
 
-    --primary: 222 84% 5%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 210 40% 96%;
+    --primary-foreground: 222 47% 6%;
 
     --secondary: 174 42% 45%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 222 30% 12%;
+    --muted-foreground: 215 16% 55%;
 
     --accent: 199 89% 48%;
     --accent-foreground: 0 0% 100%;
@@ -31,42 +31,42 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
+    --border: 222 20% 16%;
+    --input: 222 20% 16%;
     --ring: 199 89% 48%;
 
     --radius: 0.75rem;
 
     /* Extended palette */
-    --glow: 204 94% 94%;
-    --slate-deep: 222 47% 11%;
+    --glow: 199 89% 48%;
+    --slate-deep: 222 47% 6%;
     --steel-teal: 174 42% 45%;
     --sky-bright: 199 89% 48%;
-    --mist: 210 40% 98%;
+    --mist: 222 30% 12%;
 
-    /* Glass effect */
-    --glass-bg: 0 0% 100% / 0.8;
-    --glass-border: 214 32% 89%;
+    /* Glass effect — dark */
+    --glass-bg: 222 40% 10% / 0.7;
+    --glass-border: 222 20% 18%;
 
     /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(210 40% 98%) 0%, hsl(204 94% 94%) 50%, hsl(210 40% 96%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(222 47% 6%) 0%, hsl(222 40% 10%) 50%, hsl(222 47% 8%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(199 89% 48%) 0%, hsl(174 42% 45%) 100%);
-    --gradient-dark: linear-gradient(135deg, hsl(222 84% 5%) 0%, hsl(222 47% 15%) 100%);
+    --gradient-dark: linear-gradient(135deg, hsl(222 47% 4%) 0%, hsl(222 40% 8%) 100%);
 
     /* Shadows */
-    --shadow-sm: 0 1px 3px hsl(222 47% 11% / 0.04);
-    --shadow-md: 0 4px 12px hsl(222 47% 11% / 0.06);
-    --shadow-lg: 0 10px 30px hsl(222 47% 11% / 0.08);
-    --shadow-glow: 0 0 40px hsl(199 89% 48% / 0.15);
+    --shadow-sm: 0 1px 3px hsl(0 0% 0% / 0.2);
+    --shadow-md: 0 4px 12px hsl(0 0% 0% / 0.3);
+    --shadow-lg: 0 10px 30px hsl(0 0% 0% / 0.4);
+    --shadow-glow: 0 0 40px hsl(199 89% 48% / 0.2);
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 222 40% 8%;
+    --sidebar-foreground: 210 40% 92%;
+    --sidebar-primary: 210 40% 96%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 222 30% 14%;
+    --sidebar-accent-foreground: 210 40% 92%;
+    --sidebar-border: 222 20% 16%;
+    --sidebar-ring: 199 89% 48%;
   }
 }
 
@@ -86,7 +86,8 @@
 
 @layer utilities {
   .glass-card {
-    @apply bg-white/80 backdrop-blur-sm border border-border rounded-2xl;
+    background: hsl(var(--glass-bg));
+    @apply backdrop-blur-md border border-border rounded-2xl;
     box-shadow: var(--shadow-md);
   }
 
@@ -97,6 +98,7 @@
   .glass-card-hover:hover {
     box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
+    border-color: hsl(var(--accent) / 0.2);
   }
 
   .gradient-hero {

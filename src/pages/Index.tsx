@@ -2,6 +2,10 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import SectionHeading from "@/components/SectionHeading";
+import heroVisual from "@/assets/hero-visual.png";
+import serviceAds from "@/assets/service-ads.png";
+import serviceWebsite from "@/assets/service-website.png";
+import serviceSocial from "@/assets/service-social.png";
 import {
   BarChart3, Globe, TrendingUp, ClipboardList, Lightbulb,
   Upload, LayoutDashboard, Wrench, Zap, Thermometer,
@@ -22,16 +26,19 @@ const services = [
     title: "Ad Management",
     description: "Strategic ad campaigns that generate qualified leads. We manage your budget, targeting, and optimization so every dollar works harder.",
     featured: true,
+    image: serviceAds,
   },
   {
     icon: Globe,
     title: "Website Creation & Management",
     description: "Clean, fast, conversion-focused websites built specifically for contractors. Mobile-ready, trustworthy, and designed to turn visitors into calls.",
+    image: serviceWebsite,
   },
   {
     icon: TrendingUp,
     title: "Organic Social Media Growth",
     description: "Build local authority through strategic social content. Educational posts, project showcases, and trust-building content that positions you as the go-to.",
+    image: serviceSocial,
   },
 ];
 
@@ -70,41 +77,54 @@ const HomePage = () => {
   return (
     <div>
       {/* Hero */}
-      <section className="gradient-hero relative overflow-hidden">
+      <section className="gradient-hero relative overflow-hidden min-h-screen flex items-center">
         {/* Abstract cloud layers */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 -left-40 w-[600px] h-[600px] rounded-full bg-accent/5 blur-3xl" />
-          <div className="absolute -top-20 right-0 w-[500px] h-[500px] rounded-full bg-glow blur-3xl opacity-60" />
+          <div className="absolute -top-20 right-0 w-[500px] h-[500px] rounded-full bg-accent/10 blur-3xl opacity-40" />
           <div className="absolute bottom-0 left-1/3 w-[400px] h-[300px] rounded-full bg-secondary/5 blur-3xl" />
         </div>
 
         <div className="container mx-auto px-4 md:px-6 pt-32 pb-24 md:pt-40 md:pb-32 relative">
-          <motion.div
-            className="max-w-3xl mx-auto text-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-          >
-            <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">
-              Marketing Systems for Contractors
-            </span>
-            <h1 className="font-display text-4xl md:text-6xl font-bold text-primary leading-[1.1] mb-6">
-              More Leads. Better Visibility.{" "}
-              <span className="text-gradient">Less Hassle.</span>
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-10 max-w-2xl mx-auto">
-              Ads, websites, and social media built for blue-collar businesses.
-              Get strategy, pricing, and onboarding — without wasting time on sales calls.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="hero-primary" size="xl" asChild>
-                <Link to="/estimate">Get Instant Estimate <ArrowRight className="ml-1" /></Link>
-              </Button>
-              <Button variant="hero-secondary" size="xl" asChild>
-                <Link to="/portal">Create Account</Link>
-              </Button>
-            </div>
-          </motion.div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+            >
+              <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">
+                Marketing Systems for Contractors
+              </span>
+              <h1 className="font-display text-4xl md:text-6xl font-bold text-foreground leading-[1.1] mb-6">
+                More Leads. Better Visibility.{" "}
+                <span className="text-gradient">Less Hassle.</span>
+              </h1>
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-10 max-w-xl">
+                Ads, websites, and social media built for blue-collar businesses.
+                Get strategy, pricing, and onboarding — without wasting time on sales calls.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button variant="hero-primary" size="xl" asChild>
+                  <Link to="/estimate">Get Instant Estimate <ArrowRight className="ml-1" /></Link>
+                </Button>
+                <Button variant="hero-secondary" size="xl" asChild>
+                  <Link to="/portal">Create Account</Link>
+                </Button>
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="hidden lg:block"
+            >
+              <img
+                src={heroVisual}
+                alt="Cloud-inspired marketing ecosystem"
+                className="w-full rounded-3xl glow-accent"
+              />
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -122,20 +142,25 @@ const HomePage = () => {
                 key={service.title}
                 {...fadeUp}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className={`glass-card-hover p-8 relative ${
+                className={`glass-card-hover overflow-hidden relative ${
                   service.featured ? "ring-2 ring-accent/20" : ""
                 }`}
               >
-                {service.featured && (
-                  <span className="absolute top-4 right-4 text-[10px] font-bold tracking-wider uppercase bg-accent/10 text-accent px-3 py-1 rounded-full">
-                    Core Service
-                  </span>
-                )}
-                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-5">
-                  <service.icon className="w-6 h-6 text-accent" />
+                <div className="h-44 overflow-hidden">
+                  <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
                 </div>
-                <h3 className="font-display text-xl font-bold text-primary mb-3">{service.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{service.description}</p>
+                <div className="p-8">
+                  {service.featured && (
+                    <span className="absolute top-4 right-4 text-[10px] font-bold tracking-wider uppercase bg-accent/20 text-accent px-3 py-1 rounded-full backdrop-blur-sm">
+                      Core Service
+                    </span>
+                  )}
+                  <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-5">
+                    <service.icon className="w-6 h-6 text-accent" />
+                  </div>
+                  <h3 className="font-display text-xl font-bold text-foreground mb-3">{service.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{service.description}</p>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -143,7 +168,7 @@ const HomePage = () => {
       </section>
 
       {/* How It Works */}
-      <section className="section-padding bg-muted/50">
+      <section className="section-padding bg-muted/30">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeading
             label="How It Works"
@@ -158,11 +183,11 @@ const HomePage = () => {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="text-center"
               >
-                <div className="w-16 h-16 rounded-2xl bg-card border border-border flex items-center justify-center mx-auto mb-5 shadow-sm">
+                <div className="w-16 h-16 rounded-2xl bg-card border border-border flex items-center justify-center mx-auto mb-5">
                   <step.icon className="w-7 h-7 text-accent" />
                 </div>
                 <div className="text-xs font-bold text-accent mb-2">Step {i + 1}</div>
-                <h3 className="font-display text-lg font-bold text-primary mb-2">{step.title}</h3>
+                <h3 className="font-display text-lg font-bold text-foreground mb-2">{step.title}</h3>
                 <p className="text-muted-foreground text-sm">{step.desc}</p>
               </motion.div>
             ))}
@@ -187,7 +212,7 @@ const HomePage = () => {
                 className="glass-card p-5 text-center"
               >
                 <ind.icon className="w-7 h-7 text-secondary mx-auto mb-3" />
-                <span className="text-sm font-semibold text-primary">{ind.label}</span>
+                <span className="text-sm font-semibold text-foreground">{ind.label}</span>
               </motion.div>
             ))}
           </div>
@@ -195,7 +220,7 @@ const HomePage = () => {
       </section>
 
       {/* Differentiators */}
-      <section className="section-padding bg-muted/50">
+      <section className="section-padding bg-muted/30">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeading
             label="Why Clowd"
@@ -214,7 +239,7 @@ const HomePage = () => {
                   <d.icon className="w-5 h-5 text-accent" />
                 </div>
                 <div>
-                  <h3 className="font-display text-lg font-bold text-primary mb-1">{d.title}</h3>
+                  <h3 className="font-display text-lg font-bold text-foreground mb-1">{d.title}</h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">{d.desc}</p>
                 </div>
               </motion.div>
@@ -245,7 +270,7 @@ const HomePage = () => {
                 </div>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-5">"{t.text}"</p>
                 <div>
-                  <div className="font-semibold text-primary text-sm">{t.name}</div>
+                  <div className="font-semibold text-foreground text-sm">{t.name}</div>
                   <div className="text-xs text-muted-foreground">{t.company}</div>
                 </div>
               </motion.div>
@@ -257,21 +282,21 @@ const HomePage = () => {
       {/* Final CTA */}
       <section className="section-padding gradient-dark relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-1/4 w-[400px] h-[400px] rounded-full bg-accent/5 blur-3xl" />
+          <div className="absolute top-0 right-1/4 w-[400px] h-[400px] rounded-full bg-accent/8 blur-3xl" />
         </div>
         <div className="container mx-auto px-4 md:px-6 relative text-center">
           <motion.div {...fadeUp} className="max-w-2xl mx-auto">
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-primary-foreground mb-5">
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-5">
               Ready to Grow Your Business?
             </h2>
-            <p className="text-primary-foreground/60 text-lg mb-10">
+            <p className="text-muted-foreground text-lg mb-10">
               Get a transparent estimate in 60 seconds. No calls, no pressure, no contracts.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="hero-primary" size="xl" asChild>
                 <Link to="/estimate">Get Instant Estimate <ArrowRight className="ml-1" /></Link>
               </Button>
-              <Button size="xl" className="border-2 border-primary-foreground/20 bg-transparent text-primary-foreground hover:bg-primary-foreground/10" asChild>
+              <Button variant="hero-secondary" size="xl" asChild>
                 <Link to="/portal">Create Account</Link>
               </Button>
             </div>

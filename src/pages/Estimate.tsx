@@ -78,11 +78,11 @@ const EstimatePage = () => {
       onClick={onClick}
       className={`p-4 rounded-xl border-2 text-left transition-all duration-200 ${
         selected
-          ? "border-accent bg-accent/5 shadow-sm"
+          ? "border-accent bg-accent/10"
           : "border-border bg-card hover:border-accent/30"
       }`}
     >
-      <div className="font-semibold text-sm text-primary">{label}</div>
+      <div className="font-semibold text-sm text-foreground">{label}</div>
       {desc && <div className="text-xs text-muted-foreground mt-1">{desc}</div>}
     </button>
   );
@@ -100,7 +100,7 @@ const EstimatePage = () => {
               <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-5">
                 <CheckCircle2 className="w-8 h-8 text-accent" />
               </div>
-              <h1 className="font-display text-3xl md:text-4xl font-bold text-primary mb-3">
+              <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
                 Your Custom Estimate
               </h1>
               <p className="text-muted-foreground">Based on your selections for a {form.industry} company in {form.location}.</p>
@@ -110,20 +110,20 @@ const EstimatePage = () => {
               {/* Ad Management */}
               <div className="flex justify-between items-center pb-4 border-b border-border">
                 <div>
-                  <div className="font-semibold text-primary">Ad Management</div>
+                  <div className="font-semibold text-foreground">Ad Management</div>
                   <div className="text-sm text-muted-foreground">${form.adBudget.toLocaleString()}/mo ad spend × 10%</div>
                 </div>
-                <div className="font-display text-xl font-bold text-primary">${adFee.toLocaleString()}/mo</div>
+                <div className="font-display text-xl font-bold text-foreground">${adFee.toLocaleString()}/mo</div>
               </div>
 
               {/* Website */}
               {form.websitePackage !== "none" && (
                 <div className="flex justify-between items-center pb-4 border-b border-border">
                   <div>
-                    <div className="font-semibold text-primary">{webPkg?.label}</div>
+                    <div className="font-semibold text-foreground">{webPkg?.label}</div>
                     <div className="text-sm text-muted-foreground">{webPkg?.desc}</div>
                   </div>
-                  <div className="font-display text-xl font-bold text-primary">
+                  <div className="font-display text-xl font-bold text-foreground">
                     {webPkg?.price ? `$${webPkg.price.toLocaleString()}` : "Custom Quote"}
                   </div>
                 </div>
@@ -133,23 +133,23 @@ const EstimatePage = () => {
               {form.organicPackage !== "none" && (
                 <div className="flex justify-between items-center pb-4 border-b border-border">
                   <div>
-                    <div className="font-semibold text-primary">{orgPkg?.label}</div>
+                    <div className="font-semibold text-foreground">{orgPkg?.label}</div>
                     <div className="text-sm text-muted-foreground">{orgPkg?.desc}</div>
                   </div>
-                  <div className="font-display text-xl font-bold text-primary">${orgPkg?.price?.toLocaleString()}/mo</div>
+                  <div className="font-display text-xl font-bold text-foreground">${orgPkg?.price?.toLocaleString()}/mo</div>
                 </div>
               )}
 
               {/* Totals */}
-              <div className="bg-muted/50 rounded-xl p-6 space-y-3">
+              <div className="bg-muted rounded-xl p-6 space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-semibold text-primary">Estimated Monthly</span>
+                  <span className="text-sm font-semibold text-foreground">Estimated Monthly</span>
                   <span className="font-display text-2xl font-bold text-accent">${monthlyTotal.toLocaleString()}/mo</span>
                 </div>
                 {projectCost > 0 && (
                   <div className="flex justify-between items-center">
-                    <span className="text-sm font-semibold text-primary">One-Time Project Cost</span>
-                    <span className="font-display text-lg font-bold text-primary">${projectCost.toLocaleString()}</span>
+                    <span className="text-sm font-semibold text-foreground">One-Time Project Cost</span>
+                    <span className="font-display text-lg font-bold text-foreground">${projectCost.toLocaleString()}</span>
                   </div>
                 )}
               </div>
@@ -185,7 +185,7 @@ const EstimatePage = () => {
             <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-4">
               <Calculator className="w-7 h-7 text-accent" />
             </div>
-            <h1 className="font-display text-3xl md:text-4xl font-bold text-primary mb-3">
+            <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
               Instant Estimate Calculator
             </h1>
             <p className="text-muted-foreground">Get transparent pricing in under 60 seconds. No calls needed.</p>
@@ -214,9 +214,9 @@ const EstimatePage = () => {
               >
                 {step === 0 && (
                   <div className="space-y-6">
-                    <h2 className="font-display text-xl font-bold text-primary">Tell Us About Your Business</h2>
+                    <h2 className="font-display text-xl font-bold text-foreground">Tell Us About Your Business</h2>
                     <div>
-                      <label className="text-sm font-semibold text-primary mb-2 block">Industry</label>
+                      <label className="text-sm font-semibold text-foreground mb-2 block">Industry</label>
                       <div className="grid grid-cols-2 gap-2">
                         {industries.map((ind) => (
                           <OptionButton
@@ -229,13 +229,13 @@ const EstimatePage = () => {
                       </div>
                     </div>
                     <div>
-                      <label className="text-sm font-semibold text-primary mb-2 block">Location</label>
+                      <label className="text-sm font-semibold text-foreground mb-2 block">Location</label>
                       <input
                         type="text"
                         placeholder="City, State"
                         value={form.location}
                         onChange={(e) => setForm({ ...form, location: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card text-primary focus:border-accent focus:outline-none transition-colors text-sm"
+                        className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none transition-colors text-sm"
                       />
                     </div>
                   </div>
@@ -243,7 +243,7 @@ const EstimatePage = () => {
 
                 {step === 1 && (
                   <div className="space-y-6">
-                    <h2 className="font-display text-xl font-bold text-primary">Monthly Ad Budget</h2>
+                    <h2 className="font-display text-xl font-bold text-foreground">Monthly Ad Budget</h2>
                     <p className="text-sm text-muted-foreground">Our management fee is 10% of your monthly ad spend.</p>
                     <div className="grid grid-cols-2 gap-2">
                       {budgetOptions.map((b) => (
@@ -261,7 +261,7 @@ const EstimatePage = () => {
 
                 {step === 2 && (
                   <div className="space-y-6">
-                    <h2 className="font-display text-xl font-bold text-primary">Do You Need a Website?</h2>
+                    <h2 className="font-display text-xl font-bold text-foreground">Do You Need a Website?</h2>
                     <div className="grid grid-cols-1 gap-2">
                       {websiteOptions.map((opt) => (
                         <OptionButton
@@ -280,7 +280,7 @@ const EstimatePage = () => {
 
                 {step === 3 && (
                   <div className="space-y-6">
-                    <h2 className="font-display text-xl font-bold text-primary">Want Organic Social Growth?</h2>
+                    <h2 className="font-display text-xl font-bold text-foreground">Want Organic Social Growth?</h2>
                     <div className="grid grid-cols-1 gap-2">
                       {organicOptions.map((opt) => (
                         <OptionButton

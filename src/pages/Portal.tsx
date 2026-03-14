@@ -33,7 +33,7 @@ const PortalPage = () => (
       <div className="container mx-auto px-4 md:px-6 text-center relative">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">Client Portal</span>
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-primary mb-5">
+          <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-5">
             Your Marketing. One Dashboard.
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
@@ -65,7 +65,7 @@ const PortalPage = () => (
               <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center mb-4">
                 <f.icon className="w-5 h-5 text-accent" />
               </div>
-              <h3 className="font-display text-lg font-bold text-primary mb-2">{f.title}</h3>
+              <h3 className="font-display text-lg font-bold text-foreground mb-2">{f.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
@@ -74,22 +74,22 @@ const PortalPage = () => (
     </section>
 
     {/* Mock Dashboard */}
-    <section className="section-padding bg-muted/50">
+    <section className="section-padding bg-muted/30">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeading
           label="Built for Contractors"
           title="Simple. Clear. No Learning Curve."
           description="We designed the portal for busy business owners, not tech teams. If you can use a phone, you can use this."
         />
-        <motion.div {...fadeUp} className="glass-card p-6 md:p-10 max-w-4xl mx-auto">
+        <motion.div {...fadeUp} className="glass-card p-6 md:p-10 max-w-4xl mx-auto glow-accent">
           <div className="grid grid-cols-3 gap-4 mb-6">
             {[
               { label: "Active Campaigns", value: "3" },
               { label: "This Month's Leads", value: "47" },
               { label: "Assets Uploaded", value: "12" },
             ].map((stat) => (
-              <div key={stat.label} className="bg-muted/60 rounded-xl p-5 text-center">
-                <div className="font-display text-2xl font-bold text-primary">{stat.value}</div>
+              <div key={stat.label} className="bg-muted rounded-xl p-5 text-center">
+                <div className="font-display text-2xl font-bold text-foreground">{stat.value}</div>
                 <div className="text-xs text-muted-foreground mt-1">{stat.label}</div>
               </div>
             ))}
@@ -99,7 +99,7 @@ const PortalPage = () => (
               (item) => (
                 <div key={item} className="flex items-center gap-3 p-4 bg-card rounded-xl border border-border">
                   <LayoutDashboard className="w-4 h-4 text-accent shrink-0" />
-                  <span className="text-sm font-medium text-primary">{item}</span>
+                  <span className="text-sm font-medium text-foreground">{item}</span>
                   <span className="ml-auto text-xs text-muted-foreground">View →</span>
                 </div>
               )
@@ -112,20 +112,20 @@ const PortalPage = () => (
     {/* CTA */}
     <section className="section-padding gradient-dark relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-1/4 w-[400px] h-[400px] rounded-full bg-accent/5 blur-3xl" />
+        <div className="absolute top-0 right-1/4 w-[400px] h-[400px] rounded-full bg-accent/8 blur-3xl" />
       </div>
       <div className="container mx-auto px-4 md:px-6 text-center relative">
-        <h2 className="font-display text-3xl md:text-4xl font-bold text-primary-foreground mb-5">
+        <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-5">
           Ready to Get Started?
         </h2>
-        <p className="text-primary-foreground/60 text-lg mb-8 max-w-xl mx-auto">
+        <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
           Create your account, complete onboarding, and let's get your marketing running.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button variant="hero-primary" size="xl" asChild>
             <Link to="/portal">Create Account <ArrowRight className="ml-1" /></Link>
           </Button>
-          <Button size="xl" className="border-2 border-primary-foreground/20 bg-transparent text-primary-foreground hover:bg-primary-foreground/10" asChild>
+          <Button variant="hero-secondary" size="xl" asChild>
             <Link to="/estimate">Get Estimate First</Link>
           </Button>
         </div>
