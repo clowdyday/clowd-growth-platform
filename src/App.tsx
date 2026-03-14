@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import ProtectedAdminRoute from "@/components/ProtectedAdminRoute";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Index from "./pages/Index";
@@ -22,6 +23,11 @@ import WebsiteDashboard from "./pages/dashboard/WebsiteDashboard";
 import OrganicDashboard from "./pages/dashboard/OrganicDashboard";
 import AssetsDashboard from "./pages/dashboard/AssetsDashboard";
 import SettingsPage from "./pages/dashboard/SettingsPage";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminOverview from "./pages/admin/AdminOverview";
+import AdminClients from "./pages/admin/AdminClients";
+import AdminClientDetail from "./pages/admin/AdminClientDetail";
+import AdminMessages from "./pages/admin/AdminMessages";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -67,6 +73,21 @@ const App = () => (
                 <Route path="organic" element={<OrganicDashboard />} />
                 <Route path="assets" element={<AssetsDashboard />} />
                 <Route path="settings" element={<SettingsPage />} />
+              </Route>
+
+              {/* Admin dashboard */}
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedAdminRoute>
+                    <AdminLayout />
+                  </ProtectedAdminRoute>
+                }
+              >
+                <Route index element={<AdminOverview />} />
+                <Route path="clients" element={<AdminClients />} />
+                <Route path="clients/:userId" element={<AdminClientDetail />} />
+                <Route path="messages" element={<AdminMessages />} />
               </Route>
 
               <Route path="*" element={<PublicLayout><NotFound /></PublicLayout>} />
