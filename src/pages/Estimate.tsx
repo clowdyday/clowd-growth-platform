@@ -3,8 +3,19 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ArrowLeft, CheckCircle2, Rocket, Upload } from "lucide-react";
+import { ArrowRight, ArrowLeft, CheckCircle2, Rocket, Upload, Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+
+// Stripe price IDs
+const PRICE_IDS = {
+  website_starter: "price_1TAo86AeO1QDZ44qFscDBd0Q",
+  website_growth: "price_1TAo8NAeO1QDZ44qcIroyuJC",
+  social_starter: "price_1TAo8WAeO1QDZ44qE3t4rqXp",
+  social_growth: "price_1TAo8XAeO1QDZ44q1G397Lcs",
+  social_authority: "price_1TAo8YAeO1QDZ44qM81xwjgY",
+};
 
 const industries = [
   "Roofing", "HVAC", "Plumbing", "Electrical", "Concrete",
@@ -89,6 +100,51 @@ const EstimatePage = () => {
   const orgPkg = organicOptions.find((o) => o.id === form.organicPackage);
   const monthlyTotal = adFee + (orgPkg?.price || 0);
   const projectCost = webPkg?.price || 0;
+
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  const buildLineItems = () => {
+    const items: { priceId: string; recurring: boolean }[] = [];
+    if (form.websitePackage === "starter") items.push({ priceId: PRICE_IDS.website_starter, recurring: false });
+    if (form.websitePackage === "growth") items.push({ priceId: PRICE_IDS.website_growth, recurring: false });
+    if (form.organicPackage === "starter") items.push({ priceId: PRICE_IDS.social_starter, recurring: true });
+    if (form.organicPackage === "growth") items.push({ priceId: PRICE_IDS.social_growth, recurring: true });
+    if (form.organicPackage === "authority") items.push({ priceId: PRICE_IDS.social_authority, recurring: true });
+    return items;
+  };
+
+  const handleCheckout = async () => {
+    if (!user) {
+      // Store estimate data in sessionStorage so we can resume after auth
+      sessionStorage.setItem("pendingEstimate", JSON.stringify(form));
+      navigate("/auth");
+      return;
+    }
+    setCheckoutLoading(true);
+    try {
+      const lineItems = buildLineItems();
+      if (lineItems.length === 0) {
+        toast.error("No purchasable services selected. Ad management requires a custom quote.");
+        setCheckoutLoading(false);
+        return;
+      }
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: {
+          lineItems,
+          successUrl: `${window.location.origin}/dashboard?payment=success`,
+          cancelUrl: `${window.location.origin}/estimate?payment=canceled`,
+        },
+      });
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, "_blank");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to create checkout session");
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
 
   const OptionButton = ({
     selected, onClick, label, desc, price,
@@ -188,9 +244,16 @@ const EstimatePage = () => {
                   variant="hero-primary"
                   size="lg"
                   className="flex-1"
-                  onClick={() => navigate(user ? "/dashboard" : "/auth")}
+                  onClick={handleCheckout}
+                  disabled={checkoutLoading}
                 >
-                  {user ? "Go to Dashboard" : "Create Account & Buy Now"} <ArrowRight className="ml-1" />
+                  {checkoutLoading ? (
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Processing...</>
+                  ) : user ? (
+                    <>Buy Now <ArrowRight className="ml-1" /></>
+                  ) : (
+                    <>Create Account & Buy Now <ArrowRight className="ml-1" /></>
+                  )}
                 </Button>
                 <Button
                   variant="hero-secondary"
