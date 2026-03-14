@@ -3,8 +3,19 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ArrowLeft, CheckCircle2, Rocket, Upload } from "lucide-react";
+import { ArrowRight, ArrowLeft, CheckCircle2, Rocket, Upload, Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+
+// Stripe price IDs
+const PRICE_IDS = {
+  website_starter: "price_1TAo86AeO1QDZ44qFscDBd0Q",
+  website_growth: "price_1TAo8NAeO1QDZ44qcIroyuJC",
+  social_starter: "price_1TAo8WAeO1QDZ44qE3t4rqXp",
+  social_growth: "price_1TAo8XAeO1QDZ44q1G397Lcs",
+  social_authority: "price_1TAo8YAeO1QDZ44qM81xwjgY",
+};
 
 const industries = [
   "Roofing", "HVAC", "Plumbing", "Electrical", "Concrete",
