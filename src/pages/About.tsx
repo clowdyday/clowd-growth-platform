@@ -31,18 +31,18 @@ const AboutPage = () => (
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-20 left-1/3 w-[500px] h-[500px] rounded-full bg-accent/5 blur-3xl" />
       </div>
-      <div className="container mx-auto px-4 md:px-6 relative">
+      <div className="container mx-auto px-4 md:px-6 relative text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="max-w-3xl"
+          className="max-w-3xl mx-auto"
         >
           <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">About Us</span>
           <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
             We Build Marketing Systems for Contractors.
           </h1>
-          <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl">
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
             Clowd Marketing exists because most marketing agencies don't understand blue-collar businesses.
             They sell generic packages, use cookie-cutter strategies, and leave contractors guessing whether
             their money is actually working.
@@ -54,7 +54,7 @@ const AboutPage = () => (
     {/* Story */}
     <section className="section-padding">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="max-w-3xl mx-auto space-y-6">
+        <div className="max-w-3xl mx-auto space-y-6 text-center">
           <motion.div {...fadeUp}>
             <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-5">
               We Know How Contractors Operate
@@ -96,15 +96,13 @@ const AboutPage = () => (
               key={v.title}
               {...fadeUp}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="glass-card-hover p-7 flex gap-5"
+              className="glass-card-hover p-7 text-center"
             >
-              <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center mx-auto mb-4">
                 <v.icon className="w-5 h-5 text-accent" aria-hidden="true" />
               </div>
-              <div>
-                <h3 className="font-display text-lg font-bold text-foreground mb-1">{v.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{v.desc}</p>
-              </div>
+              <h3 className="font-display text-lg font-bold text-foreground mb-1">{v.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">{v.desc}</p>
             </motion.div>
           ))}
         </div>

@@ -183,13 +183,13 @@ const HomePage = () => {
                 <div className="h-44 overflow-hidden">
                   <img src={service.image} alt={`${service.title} service for contractors`} className="w-full h-full object-cover" loading="lazy" />
                 </div>
-                <div className="p-8">
+                <div className="p-8 text-center">
                   {service.featured && (
                     <span className="absolute top-4 right-4 text-[10px] font-bold tracking-wider uppercase bg-accent/20 text-accent px-3 py-1 rounded-full backdrop-blur-sm">
                       Core Service
                     </span>
                   )}
-                  <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-5">
+                  <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mx-auto mb-5">
                     <service.icon className="w-6 h-6 text-accent" aria-hidden="true" />
                   </div>
                   <h3 className="font-display text-xl font-bold text-foreground mb-3">{service.title}</h3>
@@ -267,15 +267,13 @@ const HomePage = () => {
                 key={d.title}
                 {...fadeUp}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="glass-card-hover p-7 flex gap-5"
+                className="glass-card-hover p-7 text-center"
               >
-                <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+                <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center mx-auto mb-4">
                   <d.icon className="w-5 h-5 text-accent" aria-hidden="true" />
                 </div>
-                <div>
-                  <h3 className="font-display text-lg font-bold text-foreground mb-1">{d.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{d.desc}</p>
-                </div>
+                <h3 className="font-display text-lg font-bold text-foreground mb-1">{d.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{d.desc}</p>
               </motion.div>
             ))}
           </div>
