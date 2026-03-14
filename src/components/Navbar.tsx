@@ -21,16 +21,15 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border" role="navigation" aria-label="Main navigation">
-      <div className="container mx-auto flex items-center justify-between h-16 px-4 md:px-6">
-        <Link to="/" className="flex items-center gap-2" aria-label="Clowd Marketing home">
-          <img src={clowdLogo} alt="" className="h-8 w-8" width={32} height={32} aria-hidden="true" />
-          <span className="font-display text-xl font-bold tracking-tight text-foreground">
-            Clowd<span className="text-accent">.</span>
-          </span>
-        </Link>
+      <div className="container mx-auto flex items-center justify-center h-16 px-4 md:px-6">
+        <div className="hidden md:flex items-center gap-6">
+          <Link to="/" className="flex items-center gap-2 mr-6" aria-label="Clowd Marketing home">
+            <img src={clowdLogo} alt="" className="h-8 w-8" width={32} height={32} aria-hidden="true" />
+            <span className="font-display text-xl font-bold tracking-tight text-foreground">
+              Clowd<span className="text-accent">.</span>
+            </span>
+          </Link>
 
-        {/* Desktop */}
-        <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -44,24 +43,33 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
+
+          <div className="flex items-center gap-3 ml-6">
+            {user ? (
+              <Button variant="cta" size="sm" asChild>
+                <Link to="/dashboard">Dashboard</Link>
+              </Button>
+            ) : (
+              <>
+                <Button variant="hero-secondary" size="sm" asChild>
+                  <Link to="/estimate">Get Started</Link>
+                </Button>
+                <Button variant="cta" size="sm" asChild>
+                  <Link to="/auth">Dashboard</Link>
+                </Button>
+              </>
+            )}
+          </div>
         </div>
 
-        <div className="hidden md:flex items-center gap-3">
-          {user ? (
-            <Button variant="cta" size="sm" asChild>
-              <Link to="/dashboard">Dashboard</Link>
-            </Button>
-          ) : (
-            <>
-              <Button variant="hero-secondary" size="sm" asChild>
-                <Link to="/estimate">Get Started</Link>
-              </Button>
-              <Button variant="cta" size="sm" asChild>
-                <Link to="/auth">Dashboard</Link>
-              </Button>
-            </>
-          )}
-        </div>
+        {/* Mobile: logo left, hamburger right */}
+        <div className="flex md:hidden items-center justify-between w-full">
+          <Link to="/" className="flex items-center gap-2" aria-label="Clowd Marketing home">
+            <img src={clowdLogo} alt="" className="h-8 w-8" width={32} height={32} aria-hidden="true" />
+            <span className="font-display text-xl font-bold tracking-tight text-foreground">
+              Clowd<span className="text-accent">.</span>
+            </span>
+          </Link>
 
         {/* Mobile toggle */}
         <button
