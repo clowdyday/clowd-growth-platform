@@ -77,32 +77,81 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   "name": "Clowd Marketing",
-  "description": "Marketing systems for contractors — ad management, website creation, and organic social media growth.",
+  "alternateName": ["ClowdMarketing", "Clowd"],
+  "description": "Clowd Marketing is a digital marketing agency that provides ad management, website creation, and organic social media growth for contractors and blue-collar businesses across the United States.",
   "url": "https://clowdmarketing.com",
-  "serviceType": ["Ad Management", "Website Creation", "Social Media Management"],
-  "areaServed": "US",
+  "logo": "https://clowdmarketing.com/favicon.png",
+  "image": "https://clowdmarketing.com/favicon.png",
+  "serviceType": ["Ad Management", "Website Creation", "Social Media Management", "Contractor Marketing", "Digital Marketing for Contractors"],
+  "areaServed": {
+    "@type": "Country",
+    "name": "United States"
+  },
   "audience": {
     "@type": "Audience",
-    "audienceType": "Contractors and Blue-Collar Businesses"
+    "audienceType": "Contractors, Roofers, HVAC, Plumbers, Electricians, Landscapers, Construction Companies, Solar Installers"
   },
+  "knowsAbout": ["Digital Marketing", "Google Ads", "Facebook Ads", "Instagram Ads", "Website Design", "Social Media Marketing", "Lead Generation for Contractors"],
   "offers": [
     {
       "@type": "Offer",
       "name": "Ad Management",
-      "description": "10% of monthly ad spend",
+      "description": "10% of monthly ad spend — full campaign setup, targeting, and optimization",
       "priceCurrency": "USD"
     },
     {
       "@type": "Offer",
       "name": "Starter Website",
       "price": "1000",
-      "priceCurrency": "USD"
+      "priceCurrency": "USD",
+      "description": "5-page responsive contractor website"
     },
     {
       "@type": "Offer",
       "name": "Growth Website",
       "price": "2500",
-      "priceCurrency": "USD"
+      "priceCurrency": "USD",
+      "description": "10-page conversion-optimized contractor website"
+    },
+    {
+      "@type": "Offer",
+      "name": "Starter Social Media",
+      "price": "50",
+      "priceCurrency": "USD",
+      "description": "3 posts per week on 1 social media channel"
+    },
+    {
+      "@type": "Offer",
+      "name": "Growth Social Media",
+      "price": "250",
+      "priceCurrency": "USD",
+      "description": "5 posts per week on 2 social media channels"
+    }
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5",
+    "reviewCount": "3",
+    "bestRating": "5"
+  },
+  "review": [
+    {
+      "@type": "Review",
+      "author": { "@type": "Person", "name": "Mike R." },
+      "reviewRating": { "@type": "Rating", "ratingValue": "5" },
+      "reviewBody": "Clowd changed how we get leads. The dashboard alone saves us hours every week."
+    },
+    {
+      "@type": "Review",
+      "author": { "@type": "Person", "name": "Sarah T." },
+      "reviewRating": { "@type": "Rating", "ratingValue": "5" },
+      "reviewBody": "Finally a marketing team that understands contractors. No fluff, just results."
+    },
+    {
+      "@type": "Review",
+      "author": { "@type": "Person", "name": "James L." },
+      "reviewRating": { "@type": "Rating", "ratingValue": "5" },
+      "reviewBody": "The estimate calculator sold me instantly. Transparent pricing and fast onboarding."
     }
   ]
 };
@@ -112,15 +161,17 @@ const HomePage = () => {
     <div>
       <Helmet>
         <title>Clowd Marketing — Ads, Websites & Social Media for Contractors</title>
-        <meta name="description" content="Clowd Marketing helps contractors grow with ad management, website creation, and organic social media. Get transparent pricing and start in 60 seconds." />
+        <meta name="description" content="Clowd Marketing (ClowdMarketing) helps contractors grow with ad management, website creation, and organic social media. Transparent pricing — get started in 60 seconds." />
+        <meta name="keywords" content="Clowd Marketing, ClowdMarketing, clowd marketing, clowdmarketing, contractor marketing agency, ad management for contractors, contractor website design, social media for contractors" />
         <link rel="canonical" href="https://clowdmarketing.com" />
         <meta property="og:title" content="Clowd Marketing — Marketing Systems for Contractors" />
-        <meta property="og:description" content="Ads, websites, and social media built for blue-collar businesses. Get transparent pricing and a custom strategy." />
+        <meta property="og:description" content="Clowd Marketing: ads, websites, and social media built for blue-collar businesses. Transparent pricing and a custom strategy." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://clowdmarketing.com" />
+        <meta property="og:site_name" content="Clowd Marketing" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Clowd Marketing — Marketing for Contractors" />
-        <meta name="twitter:description" content="Ad management, websites, and social media built for blue-collar businesses." />
+        <meta name="twitter:description" content="Clowd Marketing: ad management, websites, and social media built for blue-collar businesses." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
@@ -140,14 +191,14 @@ const HomePage = () => {
             className="max-w-3xl mx-auto text-center"
           >
             <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">
-              Marketing Systems for Contractors
+              Clowd Marketing — Marketing Systems for Contractors
             </span>
             <h1 className="font-display text-4xl md:text-6xl font-bold text-foreground leading-[1.1] mb-6">
               More Leads. Better Visibility.{" "}
               <span className="text-gradient">Less Hassle.</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-10 max-w-xl mx-auto">
-              Ads, websites, and social media built for blue-collar businesses.
+              Clowd Marketing builds ads, websites, and social media for blue-collar businesses.
               Get strategy, pricing, and onboarding — without wasting time on sales calls.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -168,7 +219,7 @@ const HomePage = () => {
           <SectionHeading
             label="What We Do"
             title="Three Services. One System."
-            description="Everything a contractor needs to get found, get leads, and grow — managed under one roof."
+            description="Everything a contractor needs to get found, get leads, and grow — managed under one roof by Clowd Marketing."
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {services.map((service, i) => (
@@ -181,7 +232,7 @@ const HomePage = () => {
                 }`}
               >
                 <div className="h-44 overflow-hidden">
-                  <img src={service.image} alt={`${service.title} service for contractors`} className="w-full h-full object-cover" loading="lazy" />
+                  <img src={service.image} alt={`${service.title} service by Clowd Marketing for contractors`} className="w-full h-full object-cover" loading="lazy" />
                 </div>
                 <div className="p-8 text-center">
                   {service.featured && (
@@ -207,7 +258,7 @@ const HomePage = () => {
           <SectionHeading
             label="How It Works"
             title="From Signup to Results in 4 Steps"
-            description="No long discovery calls. No confusing proposals. Just a clear path from here to growth."
+            description="No long discovery calls. No confusing proposals. Just a clear path from here to growth with Clowd Marketing."
           />
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {steps.map((step, i) => (
@@ -235,7 +286,7 @@ const HomePage = () => {
           <SectionHeading
             label="Who We Help"
             title="Built for Blue-Collar Businesses"
-            description="We specialize in marketing for local service companies. If you work with your hands, we know how to get you leads."
+            description="Clowd Marketing specializes in marketing for local service companies. If you work with your hands, we know how to get you leads."
           />
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
             {industries.map((ind, i) => (
@@ -257,9 +308,9 @@ const HomePage = () => {
       <section className="section-padding bg-muted/30" aria-labelledby="why-clowd-heading">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeading
-            label="Why Clowd"
+            label="Why Clowd Marketing"
             title="Marketing Without the Runaround"
-            description="We built Clowd to eliminate the friction contractors face with traditional agencies."
+            description="We built Clowd Marketing to eliminate the friction contractors face with traditional agencies."
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {differentiators.map((d, i) => (
@@ -322,7 +373,7 @@ const HomePage = () => {
               Ready to Grow Your Business?
             </h2>
             <p className="text-muted-foreground text-lg mb-10">
-              Get a transparent estimate in 60 seconds. No calls, no pressure, no contracts.
+              Get a transparent estimate from Clowd Marketing in 60 seconds. No calls, no pressure, no contracts.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="hero-primary" size="xl" asChild>

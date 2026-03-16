@@ -67,8 +67,13 @@ const pricingJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
   "name": "Pricing — Clowd Marketing",
-  "description": "Transparent pricing for contractor marketing services. Ad management at 10% of ad spend, websites from $1,000, social media from $50/month.",
-  "url": "https://clowdmarketing.com/pricing"
+  "description": "Transparent pricing for contractor marketing services by Clowd Marketing. Ad management at 10% of ad spend, websites from $1,000, social media from $50/month.",
+  "url": "https://clowdmarketing.com/pricing",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Clowd Marketing",
+    "url": "https://clowdmarketing.com"
+  }
 };
 
 const PackageCard = ({
@@ -108,9 +113,18 @@ const PackageCard = ({
 const PricingPage = () => (
   <div>
     <Helmet>
-      <title>Pricing — Transparent Marketing Costs for Contractors | Clowd</title>
-      <meta name="description" content="See our transparent pricing: ad management at 10% of spend, websites from $1,000, social media from $50/month. No hidden fees, no contracts." />
+      <title>Pricing — Transparent Marketing Costs | Clowd Marketing</title>
+      <meta name="description" content="Clowd Marketing pricing: ad management at 10% of spend, contractor websites from $1,000, social media from $50/month. No hidden fees, no contracts." />
+      <meta name="keywords" content="Clowd Marketing pricing, ClowdMarketing prices, contractor marketing cost, ad management pricing, contractor website cost" />
       <link rel="canonical" href="https://clowdmarketing.com/pricing" />
+      <meta property="og:title" content="Pricing — Clowd Marketing" />
+      <meta property="og:description" content="Transparent pricing by Clowd Marketing: ad management at 10% of spend, websites from $1,000, social media from $50/month." />
+      <meta property="og:url" content="https://clowdmarketing.com/pricing" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Clowd Marketing" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Pricing — Clowd Marketing" />
+      <meta name="twitter:description" content="Transparent contractor marketing pricing by Clowd Marketing." />
       <script type="application/ld+json">{JSON.stringify(pricingJsonLd)}</script>
     </Helmet>
 
@@ -121,12 +135,12 @@ const PricingPage = () => (
       </div>
       <div className="container mx-auto px-4 md:px-6 text-center relative">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">Pricing</span>
+          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">Clowd Marketing Pricing</span>
           <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-5">
             Transparent Pricing. No Surprises.
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Know exactly what you're paying before you sign up. Simple, fair, and built for contractors.
+            Know exactly what you're paying before you sign up. Simple, fair, and built for contractors by Clowd Marketing.
           </p>
         </motion.div>
       </div>
@@ -138,7 +152,7 @@ const PricingPage = () => (
         <SectionHeading
           label="Ad Management"
           title="10% of Your Monthly Ad Spend"
-          description="Our management fee scales with your budget. The more you invest in ads, the more we invest in your results."
+          description="Our management fee scales with your budget. The more you invest in ads, the more Clowd Marketing invests in your results."
         />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
           {adExamples.map((ex, i) => (
@@ -165,7 +179,7 @@ const PricingPage = () => (
         <SectionHeading
           label="Websites"
           title="Website Packages"
-          description="Professional websites built for contractors. Choose the scope that fits your business."
+          description="Professional contractor websites built by Clowd Marketing. Choose the scope that fits your business."
         />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {websitePackages.map((pkg, i) => (
@@ -181,7 +195,7 @@ const PricingPage = () => (
         <SectionHeading
           label="Organic Growth"
           title="Social Media Packages"
-          description="Build your brand, grow your audience, and establish local authority with consistent social content."
+          description="Build your brand, grow your audience, and establish local authority with consistent social content from Clowd Marketing."
         />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {organicPackages.map((pkg, i) => (
@@ -198,7 +212,7 @@ const PricingPage = () => (
       </div>
       <div className="container mx-auto px-4 md:px-6 text-center relative">
         <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-5">
-          Ready to Get Started?
+          Ready to Get Started with Clowd Marketing?
         </h2>
         <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
           Select your services, get a transparent estimate, and start growing your business today.

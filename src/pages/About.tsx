@@ -18,12 +18,35 @@ const values = [
   { icon: TrendingUp, title: "Growth-Focused", desc: "Every campaign, website, and post is designed with one goal: more leads, more booked jobs, more revenue." },
 ];
 
+const aboutJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "About Clowd Marketing",
+  "description": "Learn about Clowd Marketing — a digital marketing agency specializing in ad management, websites, and social media for contractors and blue-collar businesses.",
+  "url": "https://clowdmarketing.com/about",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Clowd Marketing",
+    "url": "https://clowdmarketing.com"
+  }
+};
+
 const AboutPage = () => (
   <div>
     <Helmet>
       <title>About Clowd Marketing — Marketing Agency for Contractors</title>
-      <meta name="description" content="Clowd Marketing specializes in ad management, websites, and social media for blue-collar businesses. Learn about our approach and why contractors trust us." />
+      <meta name="description" content="Clowd Marketing (ClowdMarketing) specializes in ad management, websites, and social media for blue-collar businesses. Learn about our approach and why contractors trust us." />
+      <meta name="keywords" content="about Clowd Marketing, ClowdMarketing, who is Clowd Marketing, contractor marketing agency, blue collar marketing" />
       <link rel="canonical" href="https://clowdmarketing.com/about" />
+      <meta property="og:title" content="About Clowd Marketing — Marketing Agency for Contractors" />
+      <meta property="og:description" content="Learn about Clowd Marketing and why contractors trust us for ads, websites, and social media." />
+      <meta property="og:url" content="https://clowdmarketing.com/about" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Clowd Marketing" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="About Clowd Marketing" />
+      <meta name="twitter:description" content="Learn about Clowd Marketing and why contractors trust us." />
+      <script type="application/ld+json">{JSON.stringify(aboutJsonLd)}</script>
     </Helmet>
 
     {/* Hero */}
@@ -38,7 +61,7 @@ const AboutPage = () => (
           transition={{ duration: 0.6 }}
           className="max-w-3xl mx-auto"
         >
-          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">About Us</span>
+          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">About Clowd Marketing</span>
           <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
             We Build Marketing Systems for Contractors.
           </h1>
@@ -65,7 +88,7 @@ const AboutPage = () => (
                 booked jobs, and a web presence that makes them look professional and trustworthy.
               </p>
               <p>
-                That's what we deliver. Our team specializes in ad campaigns, websites, and social
+                That's what Clowd Marketing delivers. Our team specializes in ad campaigns, websites, and social
                 content for roofing, HVAC, plumbing, electrical, concrete, landscaping, construction,
                 and solar companies.
               </p>
@@ -88,7 +111,7 @@ const AboutPage = () => (
       <div className="container mx-auto px-4 md:px-6">
         <motion.div {...fadeUp} className="text-center mb-14">
           <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-3">Our Approach</span>
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground">How We're Different</h2>
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground">How Clowd Marketing Is Different</h2>
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {values.map((v, i) => (
@@ -119,7 +142,7 @@ const AboutPage = () => (
           Let's Get Your Marketing Running
         </h2>
         <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
-          Get a transparent estimate or create your account to start onboarding today.
+          Get a transparent estimate from Clowd Marketing or create your account to start onboarding today.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button variant="hero-primary" size="xl" asChild>
