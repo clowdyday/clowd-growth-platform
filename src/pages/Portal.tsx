@@ -27,9 +27,18 @@ const portalFeatures = [
 const PortalPage = () => (
   <div>
     <Helmet>
-      <title>Client Portal — Manage Your Marketing Dashboard | Clowd</title>
+      <title>Client Portal — Marketing Dashboard | Clowd Marketing</title>
       <meta name="description" content="Access your Clowd Marketing client portal to onboard, upload assets, track progress, and view deliverables — all in one dashboard built for contractors." />
+      <meta name="keywords" content="Clowd Marketing portal, ClowdMarketing dashboard, contractor marketing dashboard, client portal" />
       <link rel="canonical" href="https://clowdmarketing.com/portal" />
+      <meta property="og:title" content="Client Portal — Clowd Marketing" />
+      <meta property="og:description" content="Manage your marketing with Clowd Marketing's client portal — onboarding, assets, progress, and deliverables in one place." />
+      <meta property="og:url" content="https://clowdmarketing.com/portal" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Clowd Marketing" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Client Portal — Clowd Marketing" />
+      <meta name="twitter:description" content="Manage your contractor marketing with Clowd Marketing's client portal." />
     </Helmet>
 
     {/* Hero */}
@@ -39,12 +48,12 @@ const PortalPage = () => (
       </div>
       <div className="container mx-auto px-4 md:px-6 text-center relative">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">Client Portal</span>
+          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">Clowd Marketing Client Portal</span>
           <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-5">
             Your Marketing. One Dashboard.
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-            Onboard, upload assets, view your strategy, and track progress — all from a single dashboard built for contractors.
+            Onboard, upload assets, view your strategy, and track progress — all from a single Clowd Marketing dashboard built for contractors.
           </p>
           <Button variant="hero-primary" size="xl" asChild>
             <Link to="/auth">Create Your Account <ArrowRight className="ml-1" /></Link>
@@ -59,7 +68,7 @@ const PortalPage = () => (
         <SectionHeading
           label="What You Get"
           title="Everything in One Place"
-          description="No more chasing your marketing team for updates. Everything you need is in the portal."
+          description="No more chasing your marketing team for updates. Everything you need is in the Clowd Marketing portal."
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {portalFeatures.map((f, i) => (
@@ -86,7 +95,7 @@ const PortalPage = () => (
         <SectionHeading
           label="Built for Contractors"
           title="Simple. Clear. No Learning Curve."
-          description="We designed the portal for busy business owners, not tech teams. If you can use a phone, you can use this."
+          description="We designed the Clowd Marketing portal for busy business owners, not tech teams. If you can use a phone, you can use this."
         />
         <motion.div {...fadeUp} className="glass-card p-6 md:p-10 max-w-4xl mx-auto glow-accent">
           <div className="grid grid-cols-3 gap-4 mb-6">
@@ -123,7 +132,7 @@ const PortalPage = () => (
       </div>
       <div className="container mx-auto px-4 md:px-6 text-center relative">
         <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-5">
-          Ready to Get Started?
+          Ready to Get Started with Clowd Marketing?
         </h2>
         <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
           Create your account, complete onboarding, and let's get your marketing running.

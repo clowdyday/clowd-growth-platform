@@ -21,7 +21,7 @@ const servicesData = [
     title: "Ad Management",
     featured: true,
     image: serviceAds,
-    description: "Our core service. We build, manage, and optimize ad campaigns that generate real leads for contractors.",
+    description: "Our core service. Clowd Marketing builds, manages, and optimizes ad campaigns that generate real leads for contractors.",
     details: [
       "Pricing is based on 10% of your monthly ad spend",
       "Custom strategy based on your budget, industry, and market",
@@ -36,7 +36,7 @@ const servicesData = [
     title: "Website Creation & Management",
     featured: false,
     image: serviceWebsite,
-    description: "Clean, modern, high-converting websites built specifically for blue-collar businesses. Every site is optimized for trust, speed, and mobile performance.",
+    description: "Clean, modern, high-converting websites built by Clowd Marketing specifically for blue-collar businesses. Every site is optimized for trust, speed, and mobile performance.",
     details: [
       "Multiple packages: Starter ($1,000), Growth ($2,500), and Custom",
       "Designed for conversion — not just aesthetics",
@@ -51,7 +51,7 @@ const servicesData = [
     title: "Organic Social Media Growth & Management",
     featured: false,
     image: serviceSocial,
-    description: "Build your brand and local authority through strategic organic social media. Position yourself as the contractor people trust before they even call.",
+    description: "Build your brand and local authority through strategic organic social media managed by Clowd Marketing. Position yourself as the contractor people trust before they even call.",
     details: [
       "Packages starting at $50/month",
       "Educational and trust-building content",
@@ -63,13 +63,37 @@ const servicesData = [
   },
 ];
 
+const servicesJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Clowd Marketing Services",
+  "description": "Marketing services offered by Clowd Marketing for contractors",
+  "url": "https://clowdmarketing.com/services",
+  "itemListElement": servicesData.map((s, i) => ({
+    "@type": "ListItem",
+    "position": i + 1,
+    "name": s.title,
+    "description": s.description,
+  })),
+};
+
 const ServicesPage = () => {
   return (
     <div>
       <Helmet>
         <title>Services — Ad Management, Websites & Social Media | Clowd Marketing</title>
-        <meta name="description" content="Clowd Marketing offers ad management, website creation, and organic social media growth for contractors. See our full service details and start today." />
+        <meta name="description" content="Clowd Marketing offers ad management, website creation, and organic social media growth for contractors. See our full service details and get started today." />
+        <meta name="keywords" content="Clowd Marketing services, ClowdMarketing, contractor ad management, contractor website design, social media for contractors" />
         <link rel="canonical" href="https://clowdmarketing.com/services" />
+        <meta property="og:title" content="Services — Clowd Marketing" />
+        <meta property="og:description" content="Ad management, website creation, and social media growth for contractors by Clowd Marketing." />
+        <meta property="og:url" content="https://clowdmarketing.com/services" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Clowd Marketing" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Services — Clowd Marketing" />
+        <meta name="twitter:description" content="Ad management, websites, and social media for contractors by Clowd Marketing." />
+        <script type="application/ld+json">{JSON.stringify(servicesJsonLd)}</script>
       </Helmet>
 
       {/* Hero */}
@@ -79,12 +103,12 @@ const ServicesPage = () => {
         </div>
         <div className="container mx-auto px-4 md:px-6 text-center relative">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">Our Services</span>
+            <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">Clowd Marketing Services</span>
             <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-5">
               Everything Contractors Need to Grow
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Ads, websites, and social media — managed by a team that actually understands blue-collar businesses.
+              Ads, websites, and social media — managed by Clowd Marketing, a team that actually understands blue-collar businesses.
             </p>
           </motion.div>
         </div>
@@ -106,7 +130,7 @@ const ServicesPage = () => {
                 </span>
               )}
               <div className="h-56 overflow-hidden">
-                <img src={service.image} alt={`${service.title} for contractors`} className="w-full h-full object-cover" loading="lazy" />
+                <img src={service.image} alt={`${service.title} by Clowd Marketing for contractors`} className="w-full h-full object-cover" loading="lazy" />
               </div>
               <div className="p-8 md:p-12 text-center">
                 <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-5">
@@ -140,7 +164,7 @@ const ServicesPage = () => {
         </div>
         <div className="container mx-auto px-4 md:px-6 text-center relative">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-5">
-            Ready to Get Started?
+            Ready to Get Started with Clowd Marketing?
           </h2>
           <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
             Select your services, get transparent pricing, and start growing your business today.
