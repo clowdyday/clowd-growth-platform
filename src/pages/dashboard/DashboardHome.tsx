@@ -68,16 +68,16 @@ const DashboardHome = () => {
       const serviceIds = services.map((s) => s.id);
       const { data } = await supabase
         .from("service_onboarding")
-        .select("field_name, field_value")
+        .select("step_key, step_data")
         .in("service_id", serviceIds);
-      setAllOnboarding(data || []);
+      setAllOnboarding((data as { step_key: string; step_data: Record<string, string> | null }[]) || []);
     };
     loadAllOnboarding();
   }, [user, services]);
 
   const getField = (key: string) => {
-    const entry = allOnboarding.find((o) => o.field_name === key);
-    return entry?.field_value || "";
+    const entry = allOnboarding.find((o) => o.step_key === key);
+    return entry?.step_data?.value || entry?.step_data?.[key] || "";
   };
 
   const handleAddService = async (type: "ad_management" | "website" | "organic_social") => {
