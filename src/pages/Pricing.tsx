@@ -24,20 +24,40 @@ const websitePackages = [
     name: "Starter Website",
     price: "$1,000",
     period: "one-time",
-    features: ["5-page responsive website", "Mobile-optimized design", "Contact form integration", "Basic SEO setup", "1 round of revisions"],
+    features: [
+      "5-page responsive website",
+      "Mobile-first design",
+      "Contact form integration",
+      "On-page SEO setup",
+      "1 round of revisions",
+    ],
   },
   {
     name: "Growth Website",
     price: "$2,500",
     period: "one-time",
     featured: true,
-    features: ["10-page responsive website", "Conversion-optimized layouts", "Advanced SEO setup", "Blog or portfolio section", "Speed optimization", "3 rounds of revisions"],
+    features: [
+      "10-page responsive website",
+      "Conversion-optimized layouts",
+      "Advanced SEO setup",
+      "Blog or portfolio section",
+      "Speed & Core Web Vitals optimization",
+      "3 rounds of revisions",
+    ],
   },
   {
     name: "Custom Website",
     price: "Custom",
     period: "quote",
-    features: ["Fully custom design & development", "Unlimited pages", "Custom functionality", "Advanced integrations", "Dedicated project manager", "Ongoing support options"],
+    features: [
+      "Fully custom design & development",
+      "Unlimited pages",
+      "Custom functionality & integrations",
+      "Advanced analytics setup",
+      "Dedicated project manager",
+      "Ongoing support options",
+    ],
   },
 ];
 
@@ -46,20 +66,41 @@ const organicPackages = [
     name: "Starter Social",
     price: "$50",
     period: "/month",
-    features: ["3 posts per week", "Basic content strategy", "Platform: 1 channel", "Monthly performance report", "Stock + branded graphics"],
+    features: [
+      "3 posts per week",
+      "Basic content strategy",
+      "1 social media channel",
+      "Monthly performance report",
+      "Branded graphics",
+    ],
   },
   {
     name: "Growth Social",
     price: "$250",
     period: "/month",
     featured: true,
-    features: ["5 posts per week", "Content calendar + strategy", "Platforms: 2 channels", "Short-form video content", "Engagement management", "Bi-weekly reporting"],
+    features: [
+      "5 posts per week",
+      "Full content calendar & strategy",
+      "2 social media channels",
+      "Short-form video content",
+      "Community engagement management",
+      "Bi-weekly reporting",
+    ],
   },
   {
     name: "Authority Social",
     price: "$1,000",
     period: "/month",
-    features: ["Daily posting", "Full content production", "Platforms: 3+ channels", "Video + photo shoots", "Community management", "Dedicated social strategist", "Weekly reporting"],
+    features: [
+      "Daily posting",
+      "Full content production",
+      "3+ social media channels",
+      "Video & photo content",
+      "Full community management",
+      "Dedicated social strategist",
+      "Weekly reporting",
+    ],
   },
 ];
 
@@ -67,7 +108,7 @@ const pricingJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
   "name": "Pricing — Clowd Marketing",
-  "description": "Transparent pricing for contractor marketing services by Clowd Marketing. Ad management at 10% of ad spend, websites from $1,000, social media from $50/month.",
+  "description": "Transparent pricing for digital marketing services by Clowd Marketing. Ad management at 10% of ad spend, websites from $1,000, social media from $50/month.",
   "url": "https://clowdmarketing.com/pricing",
   "isPartOf": {
     "@type": "WebSite",
@@ -114,8 +155,8 @@ const PricingPage = () => (
   <div>
     <Helmet>
       <title>Pricing — Transparent Marketing Costs | Clowd Marketing</title>
-      <meta name="description" content="Clowd Marketing pricing: ad management at 10% of spend, contractor websites from $1,000, social media from $50/month. No hidden fees, no contracts." />
-      <meta name="keywords" content="Clowd Marketing pricing, ClowdMarketing prices, contractor marketing cost, ad management pricing, contractor website cost" />
+      <meta name="description" content="Clowd Marketing pricing: performance ad management at 10% of spend, websites from $1,000, social media from $50/month. No hidden fees, no long-term contracts." />
+      <meta name="keywords" content="Clowd Marketing pricing, digital marketing agency cost, ad management pricing, website design cost, social media marketing pricing" />
       <link rel="canonical" href="https://clowdmarketing.com/pricing" />
       <meta property="og:title" content="Pricing — Clowd Marketing" />
       <meta property="og:description" content="Transparent pricing by Clowd Marketing: ad management at 10% of spend, websites from $1,000, social media from $50/month." />
@@ -124,7 +165,7 @@ const PricingPage = () => (
       <meta property="og:site_name" content="Clowd Marketing" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Pricing — Clowd Marketing" />
-      <meta name="twitter:description" content="Transparent contractor marketing pricing by Clowd Marketing." />
+      <meta name="twitter:description" content="Transparent digital marketing pricing by Clowd Marketing." />
       <script type="application/ld+json">{JSON.stringify(pricingJsonLd)}</script>
     </Helmet>
 
@@ -135,12 +176,12 @@ const PricingPage = () => (
       </div>
       <div className="container mx-auto px-4 md:px-6 text-center relative">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">Clowd Marketing Pricing</span>
+          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">Transparent Pricing</span>
           <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-5">
-            Transparent Pricing. No Surprises.
+            Know Exactly What You're Paying. Always.
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Know exactly what you're paying before you sign up. Simple, fair, and built for contractors by Clowd Marketing.
+            Simple, fair, and fully transparent pricing — built for businesses that want results, not surprises. No hidden fees, no long-term lock-ins.
           </p>
         </motion.div>
       </div>
@@ -152,7 +193,7 @@ const PricingPage = () => (
         <SectionHeading
           label="Ad Management"
           title="10% of Your Monthly Ad Spend"
-          description="Our management fee scales with your budget. The more you invest in ads, the more Clowd Marketing invests in your results."
+          description="Our management fee scales with your investment. The more you put into growth, the more we invest in your results — fully aligned incentives."
         />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
           {adExamples.map((ex, i) => (
@@ -170,6 +211,9 @@ const PricingPage = () => (
             </motion.div>
           ))}
         </div>
+        <p className="text-center text-sm text-muted-foreground mt-6 max-w-xl mx-auto">
+          Minimum ad spend of $500/month. Management fee covers full campaign setup, creative direction, targeting, optimization, and reporting.
+        </p>
       </div>
     </section>
 
@@ -178,8 +222,8 @@ const PricingPage = () => (
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeading
           label="Websites"
-          title="Website Packages"
-          description="Professional contractor websites built by Clowd Marketing. Choose the scope that fits your business."
+          title="Professional Website Packages"
+          description="High-converting websites designed to represent your brand and turn visitors into customers. Choose the scope that fits your business."
         />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {websitePackages.map((pkg, i) => (
@@ -193,9 +237,9 @@ const PricingPage = () => (
     <section className="section-padding" aria-labelledby="social-pricing">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeading
-          label="Organic Growth"
-          title="Social Media Packages"
-          description="Build your brand, grow your audience, and establish local authority with consistent social content from Clowd Marketing."
+          label="Organic Social"
+          title="Social Media Growth Packages"
+          description="Build your brand, grow your audience, and establish authority with consistent, strategic social content managed by Clowd Marketing."
         />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {organicPackages.map((pkg, i) => (
@@ -212,13 +256,13 @@ const PricingPage = () => (
       </div>
       <div className="container mx-auto px-4 md:px-6 text-center relative">
         <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-5">
-          Ready to Get Started with Clowd Marketing?
+          Ready to Get Started?
         </h2>
         <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
-          Select your services, get a transparent estimate, and start growing your business today.
+          Use our estimate tool to build your custom plan and see exactly what your investment will look like.
         </p>
         <Button variant="hero-primary" size="xl" asChild>
-          <Link to="/estimate">Get Started <ArrowRight className="ml-1" /></Link>
+          <Link to="/estimate">Get Your Free Estimate <ArrowRight className="ml-1" /></Link>
         </Button>
       </div>
     </section>

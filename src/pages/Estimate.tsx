@@ -18,22 +18,30 @@ const PRICE_IDS = {
 };
 
 const industries = [
-  "Roofing", "HVAC", "Plumbing", "Electrical", "Concrete",
-  "Landscaping", "Construction", "Solar", "Pressure Washing", "Other",
+  "E-Commerce",
+  "Health & Wellness",
+  "Professional Services",
+  "Real Estate",
+  "SaaS / Technology",
+  "Retail & Local Business",
+  "Education & Coaching",
+  "Home Services",
+  "Hospitality & Food",
+  "Other",
 ];
 
 const websiteOptions = [
-  { id: "none", label: "No Website", price: 0 },
+  { id: "none", label: "No Website Needed", price: 0 },
   { id: "starter", label: "Starter Website", price: 1000, desc: "5-page responsive site" },
   { id: "growth", label: "Growth Website", price: 2500, desc: "10-page conversion-optimized" },
-  { id: "custom", label: "Custom Website", price: null, desc: "Fully custom build" },
+  { id: "custom", label: "Custom Website", price: null, desc: "Fully custom build — we'll quote you" },
 ];
 
 const organicOptions = [
   { id: "none", label: "No Social Management", price: 0 },
   { id: "starter", label: "Starter Social", price: 50, desc: "3 posts/week, 1 channel" },
   { id: "growth", label: "Growth Social", price: 250, desc: "5 posts/week, 2 channels" },
-  { id: "authority", label: "Authority Social", price: 100, desc: "Daily posting, 3+ channels" },
+  { id: "authority", label: "Authority Social", price: 1000, desc: "Daily posting, 3+ channels" },
 ];
 
 const budgetOptions = [1000, 2500, 5000, 7500, 10000, 15000, 20000];
@@ -115,7 +123,6 @@ const EstimatePage = () => {
 
   const handleCheckout = async () => {
     if (!user) {
-      // Store estimate data in sessionStorage so we can resume after auth
       sessionStorage.setItem("pendingEstimate", JSON.stringify(form));
       navigate("/auth");
       return;
@@ -124,7 +131,7 @@ const EstimatePage = () => {
     try {
       const lineItems = buildLineItems();
       if (lineItems.length === 0) {
-        toast.error("No purchasable services selected. Ad management requires a custom quote.");
+        toast.error("No purchasable services selected. Ad management requires a custom quote — please contact us.");
         setCheckoutLoading(false);
         return;
       }
@@ -140,7 +147,7 @@ const EstimatePage = () => {
         window.open(data.url, "_blank");
       }
     } catch (err: any) {
-      toast.error(err.message || "Failed to create checkout session");
+      toast.error(err.message || "Failed to create checkout session. Please try again.");
     } finally {
       setCheckoutLoading(false);
     }
@@ -172,7 +179,7 @@ const EstimatePage = () => {
     return (
       <div className="gradient-hero min-h-screen pt-32 pb-20">
         <Helmet>
-          <title>Your Estimate — Clowd Marketing</title>
+          <title>Your Custom Estimate — Clowd Marketing</title>
           <meta name="robots" content="noindex" />
         </Helmet>
         <div className="container mx-auto px-4 md:px-6">
@@ -186,16 +193,18 @@ const EstimatePage = () => {
                 <CheckCircle2 className="w-8 h-8 text-accent" aria-hidden="true" />
               </div>
               <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
-                Your Custom Estimate
+                Your Custom Marketing Plan
               </h1>
-              <p className="text-muted-foreground">Based on your selections for {form.companyName} — {form.industry} in {form.location}.</p>
+              <p className="text-muted-foreground">
+                Built for <strong className="text-foreground">{form.companyName}</strong> — {form.industry} in {form.location}.
+              </p>
             </div>
 
             <div className="glass-card p-8 glow-accent space-y-6">
               {form.wantAds && (
                 <div className="flex justify-between items-center pb-4 border-b border-border">
                   <div>
-                    <div className="font-semibold text-foreground">Ad Management</div>
+                    <div className="font-semibold text-foreground">Performance Ad Management</div>
                     <div className="text-sm text-muted-foreground">${form.adBudget.toLocaleString()}/mo ad spend × 10%</div>
                   </div>
                   <div className="font-display text-xl font-bold text-foreground">${adFee.toLocaleString()}/mo</div>
@@ -250,9 +259,9 @@ const EstimatePage = () => {
                   {checkoutLoading ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Processing...</>
                   ) : user ? (
-                    <>Buy Now <ArrowRight className="ml-1" /></>
+                    <>Get Started Now <ArrowRight className="ml-1" /></>
                   ) : (
-                    <>Create Account & Buy Now <ArrowRight className="ml-1" /></>
+                    <>Create Account & Get Started <ArrowRight className="ml-1" /></>
                   )}
                 </Button>
                 <Button
@@ -263,6 +272,10 @@ const EstimatePage = () => {
                   Recalculate
                 </Button>
               </div>
+
+              <p className="text-xs text-muted-foreground text-center pt-2">
+                No contracts. No hidden fees. Cancel anytime on monthly services.
+              </p>
             </div>
           </motion.div>
         </div>
@@ -273,8 +286,8 @@ const EstimatePage = () => {
   return (
     <div className="gradient-hero min-h-screen pt-32 pb-20">
       <Helmet>
-        <title>Get Started — Build Your Marketing Plan | Clowd Marketing</title>
-        <meta name="description" content="Select your services, tell us about your business, and get a transparent estimate in under 60 seconds. No calls needed." />
+        <title>Build Your Marketing Plan — Free Estimate | Clowd Marketing</title>
+        <meta name="description" content="Select your services, tell us about your business, and get a transparent marketing estimate in under 60 seconds. No calls needed." />
         <link rel="canonical" href="https://clowdmarketing.com/estimate" />
       </Helmet>
       <div className="container mx-auto px-4 md:px-6">
@@ -288,9 +301,9 @@ const EstimatePage = () => {
               <Rocket className="w-7 h-7 text-accent" aria-hidden="true" />
             </div>
             <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
-              Get Started
+              Build Your Marketing Plan
             </h1>
-            <p className="text-muted-foreground">Tell us about your business and we'll build your custom plan.</p>
+            <p className="text-muted-foreground">Tell us about your business and get a transparent estimate in 60 seconds.</p>
           </div>
 
           {/* Progress */}
@@ -322,7 +335,7 @@ const EstimatePage = () => {
                       <input
                         id="companyName"
                         type="text"
-                        placeholder="Your Company"
+                        placeholder="Your Company Name"
                         value={form.companyName}
                         onChange={(e) => setForm({ ...form, companyName: e.target.value })}
                         maxLength={100}
@@ -347,7 +360,7 @@ const EstimatePage = () => {
                       <input
                         id="location"
                         type="text"
-                        placeholder="City, State"
+                        placeholder="City, State or Country"
                         value={form.location}
                         onChange={(e) => setForm({ ...form, location: e.target.value })}
                         maxLength={100}
@@ -360,13 +373,13 @@ const EstimatePage = () => {
                 {step === 1 && (
                   <div className="space-y-6">
                     <h2 className="font-display text-xl font-bold text-foreground">Select Your Services</h2>
-                    <p className="text-sm text-muted-foreground">Choose one or more services to include in your plan.</p>
+                    <p className="text-sm text-muted-foreground">Choose one or more services to include in your growth plan.</p>
                     <div className="space-y-3">
                       <OptionButton
                         selected={form.wantAds}
                         onClick={() => setForm({ ...form, wantAds: !form.wantAds })}
-                        label="Ad Management"
-                        desc="10% of monthly ad spend"
+                        label="Performance Ad Management"
+                        desc="Google, Meta & more — 10% of monthly ad spend"
                         price="From $100/mo"
                       />
                       {websiteOptions.filter(o => o.id !== "none").map((opt) => (
@@ -396,7 +409,7 @@ const EstimatePage = () => {
                 {step === 2 && form.wantAds && (
                   <div className="space-y-6">
                     <h2 className="font-display text-xl font-bold text-foreground">Monthly Ad Budget</h2>
-                    <p className="text-sm text-muted-foreground">Our management fee is 10% of your monthly ad spend.</p>
+                    <p className="text-sm text-muted-foreground">Our management fee is 10% of your monthly ad spend — fully aligned with your results.</p>
                     <div className="grid grid-cols-2 gap-2">
                       {budgetOptions.map((b) => (
                         <OptionButton
@@ -414,13 +427,13 @@ const EstimatePage = () => {
                 {step === 2 && !form.wantAds && (
                   <div className="space-y-6">
                     <h2 className="font-display text-xl font-bold text-foreground">Brand Details</h2>
-                    <p className="text-sm text-muted-foreground">Help us understand your brand better.</p>
+                    <p className="text-sm text-muted-foreground">Help us understand your brand so we can tailor our approach.</p>
                     <div>
                       <label htmlFor="brandColors" className="text-sm font-semibold text-foreground mb-2 block">Brand Colors (optional)</label>
                       <input
                         id="brandColors"
                         type="text"
-                        placeholder="e.g. Blue and white, #1a1a1a"
+                        placeholder="e.g. Navy blue and white, #1a1a1a"
                         value={form.brandColors}
                         onChange={(e) => setForm({ ...form, brandColors: e.target.value })}
                         maxLength={100}
@@ -432,8 +445,8 @@ const EstimatePage = () => {
 
                 {step === 3 && (
                   <div className="space-y-6">
-                    <h2 className="font-display text-xl font-bold text-foreground">Upload Your Assets</h2>
-                    <p className="text-sm text-muted-foreground">Upload your logo, photos, or any brand materials. You can also do this later from your dashboard.</p>
+                    <h2 className="font-display text-xl font-bold text-foreground">Upload Your Brand Assets</h2>
+                    <p className="text-sm text-muted-foreground">Upload your logo, photos, or brand materials. You can also do this later from your client dashboard.</p>
                     <div
                       className="border-2 border-dashed border-border rounded-xl p-8 text-center cursor-pointer hover:border-accent/40 transition-colors"
                       onClick={() => document.getElementById("file-upload")?.click()}
@@ -443,8 +456,13 @@ const EstimatePage = () => {
                     >
                       <Upload className="w-10 h-10 text-muted-foreground mx-auto mb-3" aria-hidden="true" />
                       <p className="text-sm text-muted-foreground">
-                        {form.logoFile ? form.logoFile.name : "Click to upload logo or brand assets"}
+                        {form.logoFile ? (
+                          <span className="text-accent font-semibold">{form.logoFile.name}</span>
+                        ) : (
+                          "Click to upload logo or brand assets"
+                        )}
                       </p>
+                      <p className="text-xs text-muted-foreground mt-1">PNG, JPG, SVG up to 10MB</p>
                       <input
                         id="file-upload"
                         type="file"
@@ -457,7 +475,7 @@ const EstimatePage = () => {
                       <label htmlFor="notes" className="text-sm font-semibold text-foreground mb-2 block">Additional Notes (optional)</label>
                       <textarea
                         id="notes"
-                        placeholder="Any specific goals, preferences, or details..."
+                        placeholder="Any specific goals, target audience, competitors, or preferences..."
                         value={form.notes}
                         onChange={(e) => setForm({ ...form, notes: e.target.value })}
                         rows={3}
@@ -473,17 +491,23 @@ const EstimatePage = () => {
                     <h2 className="font-display text-xl font-bold text-foreground">Review Your Selections</h2>
                     <div className="space-y-3">
                       <div className="p-4 rounded-xl bg-muted">
-                        <div className="text-xs text-muted-foreground mb-1">Company</div>
+                        <div className="text-xs text-muted-foreground mb-1">Business</div>
                         <div className="font-semibold text-foreground">{form.companyName} — {form.industry}, {form.location}</div>
                       </div>
                       <div className="p-4 rounded-xl bg-muted">
                         <div className="text-xs text-muted-foreground mb-1">Selected Services</div>
-                        <div className="font-semibold text-foreground">{selectedServices().join(", ") || "None"}</div>
+                        <div className="font-semibold text-foreground">{selectedServices().join(", ") || "None selected"}</div>
                       </div>
                       {form.wantAds && (
                         <div className="p-4 rounded-xl bg-muted">
-                          <div className="text-xs text-muted-foreground mb-1">Ad Budget</div>
-                          <div className="font-semibold text-foreground">${form.adBudget.toLocaleString()}/mo → ${adFee.toLocaleString()}/mo fee</div>
+                          <div className="text-xs text-muted-foreground mb-1">Monthly Ad Budget</div>
+                          <div className="font-semibold text-foreground">${form.adBudget.toLocaleString()}/mo → ${adFee.toLocaleString()}/mo management fee</div>
+                        </div>
+                      )}
+                      {monthlyTotal > 0 && (
+                        <div className="p-4 rounded-xl bg-accent/10 border border-accent/20">
+                          <div className="text-xs text-accent mb-1">Estimated Monthly Total</div>
+                          <div className="font-display text-xl font-bold text-foreground">${monthlyTotal.toLocaleString()}/mo</div>
                         </div>
                       )}
                     </div>

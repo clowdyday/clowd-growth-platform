@@ -16,29 +16,29 @@ const fadeUp = {
 };
 
 const portalFeatures = [
-  { icon: ClipboardList, title: "Complete Onboarding", desc: "Fill out structured forms with your business details, goals, and preferences." },
-  { icon: Upload, title: "Upload Assets", desc: "Submit logos, photos, videos, and brand materials through a secure portal." },
-  { icon: Eye, title: "View Your Strategy", desc: "Access your custom marketing plan with clear deliverables and timelines." },
-  { icon: BarChart3, title: "Track Progress", desc: "Monitor campaign performance, deliverables, and project status in real time." },
-  { icon: FileText, title: "See Deliverables", desc: "Review completed work, ad creatives, website drafts, and content." },
-  { icon: Shield, title: "Stay Informed", desc: "Get updates and reports without constant phone calls or email chains." },
+  { icon: ClipboardList, title: "Complete Onboarding", desc: "Fill out structured forms with your business details, goals, and target audience — so we can hit the ground running." },
+  { icon: Upload, title: "Upload Brand Assets", desc: "Submit logos, photos, videos, and brand materials through a secure, organized portal." },
+  { icon: Eye, title: "View Your Strategy", desc: "Access your custom marketing plan with clear deliverables, timelines, and campaign objectives." },
+  { icon: BarChart3, title: "Track Performance", desc: "Monitor campaign results, deliverables, and project milestones in real time — no guesswork." },
+  { icon: FileText, title: "Review Deliverables", desc: "See completed work including ad creatives, website drafts, content calendars, and reports." },
+  { icon: Shield, title: "Stay in the Loop", desc: "Receive updates, reports, and insights without constant back-and-forth emails or calls." },
 ];
 
 const PortalPage = () => (
   <div>
     <Helmet>
-      <title>Client Portal — Marketing Dashboard | Clowd Marketing</title>
-      <meta name="description" content="Access your Clowd Marketing client portal to onboard, upload assets, track progress, and view deliverables — all in one dashboard built for contractors." />
-      <meta name="keywords" content="Clowd Marketing portal, ClowdMarketing dashboard, contractor marketing dashboard, client portal" />
+      <title>Client Portal — Your Marketing Dashboard | Clowd Marketing</title>
+      <meta name="description" content="Access your Clowd Marketing client portal to onboard, upload assets, track campaign performance, and view deliverables — all in one powerful dashboard." />
+      <meta name="keywords" content="Clowd Marketing portal, marketing client dashboard, digital marketing portal, campaign tracking dashboard" />
       <link rel="canonical" href="https://clowdmarketing.com/portal" />
       <meta property="og:title" content="Client Portal — Clowd Marketing" />
-      <meta property="og:description" content="Manage your marketing with Clowd Marketing's client portal — onboarding, assets, progress, and deliverables in one place." />
+      <meta property="og:description" content="Manage your marketing with Clowd Marketing's client portal — onboarding, assets, performance tracking, and deliverables in one place." />
       <meta property="og:url" content="https://clowdmarketing.com/portal" />
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="Clowd Marketing" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Client Portal — Clowd Marketing" />
-      <meta name="twitter:description" content="Manage your contractor marketing with Clowd Marketing's client portal." />
+      <meta name="twitter:description" content="Your marketing, fully managed and fully visible — all in the Clowd Marketing client portal." />
     </Helmet>
 
     {/* Hero */}
@@ -53,7 +53,7 @@ const PortalPage = () => (
             Your Marketing. One Dashboard.
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-            Onboard, upload assets, view your strategy, and track progress — all from a single Clowd Marketing dashboard built for contractors.
+            Onboard, upload assets, view your strategy, and track results — all from a single, intuitive dashboard designed for busy business owners.
           </p>
           <Button variant="hero-primary" size="xl" asChild>
             <Link to="/auth">Create Your Account <ArrowRight className="ml-1" /></Link>
@@ -62,13 +62,13 @@ const PortalPage = () => (
       </div>
     </section>
 
-    {/* Dashboard Preview */}
+    {/* Features Grid */}
     <section className="section-padding">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeading
           label="What You Get"
           title="Everything in One Place"
-          description="No more chasing your marketing team for updates. Everything you need is in the Clowd Marketing portal."
+          description="No more chasing your marketing team for updates. Everything you need is in the Clowd Marketing portal — transparent, organized, and always accessible."
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {portalFeatures.map((f, i) => (
@@ -89,19 +89,19 @@ const PortalPage = () => (
       </div>
     </section>
 
-    {/* Mock Dashboard */}
+    {/* Mock Dashboard Preview */}
     <section className="section-padding bg-muted/30">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeading
-          label="Built for Contractors"
+          label="Built for Business Owners"
           title="Simple. Clear. No Learning Curve."
-          description="We designed the Clowd Marketing portal for busy business owners, not tech teams. If you can use a phone, you can use this."
+          description="We designed the Clowd Marketing portal for growth-focused business owners, not tech teams. If you can use a smartphone, you can use this."
         />
         <motion.div {...fadeUp} className="glass-card p-6 md:p-10 max-w-4xl mx-auto glow-accent">
           <div className="grid grid-cols-3 gap-4 mb-6">
             {[
               { label: "Active Campaigns", value: "3" },
-              { label: "This Month's Leads", value: "47" },
+              { label: "Leads This Month", value: "47" },
               { label: "Assets Uploaded", value: "12" },
             ].map((stat) => (
               <div key={stat.label} className="bg-muted rounded-xl p-5 text-center">
@@ -111,7 +111,7 @@ const PortalPage = () => (
             ))}
           </div>
           <div className="space-y-3">
-            {["Website Draft Ready for Review", "Ad Campaign — Week 2 Report", "Social Content Calendar — March"].map(
+            {["Website Draft Ready for Review", "Ad Campaign — Performance Report", "Social Content Calendar — This Month"].map(
               (item) => (
                 <div key={item} className="flex items-center gap-3 p-4 bg-card rounded-xl border border-border">
                   <LayoutDashboard className="w-4 h-4 text-accent shrink-0" aria-hidden="true" />
@@ -132,17 +132,17 @@ const PortalPage = () => (
       </div>
       <div className="container mx-auto px-4 md:px-6 text-center relative">
         <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-5">
-          Ready to Get Started with Clowd Marketing?
+          Ready to Take Control of Your Marketing?
         </h2>
         <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
-          Create your account, complete onboarding, and let's get your marketing running.
+          Create your account, complete onboarding in minutes, and let's start driving real results for your business.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button variant="hero-primary" size="xl" asChild>
             <Link to="/auth">Create Account <ArrowRight className="ml-1" /></Link>
           </Button>
           <Button variant="hero-secondary" size="xl" asChild>
-            <Link to="/estimate">Get Started</Link>
+            <Link to="/estimate">Get an Estimate</Link>
           </Button>
         </div>
       </div>

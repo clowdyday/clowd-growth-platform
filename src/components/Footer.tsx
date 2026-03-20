@@ -9,25 +9,25 @@ const Footer = () => (
           <div className="flex items-center gap-2 mb-3">
             <img src={clowdLogo} alt="Clowd Marketing logo" className="h-7 w-7" width={28} height={28} />
             <h3 className="font-display text-xl font-bold">
-              Clowd Marketing<span className="text-accent">.</span>
+              Clowd<span className="text-accent">.</span>
             </h3>
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Clowd Marketing — marketing systems built for contractors. Ad management, websites, and social media. More leads, better visibility, less hassle.
+            Performance-driven digital marketing for service-based and e-commerce businesses. Ads, websites, and social media — built to scale.
           </p>
         </div>
         <nav aria-label="Services">
           <h4 className="font-display text-sm font-semibold mb-4 text-foreground/80">Services</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li><Link to="/services" className="hover:text-accent transition-colors">Ad Management</Link></li>
-            <li><Link to="/services" className="hover:text-accent transition-colors">Website Creation</Link></li>
+            <li><Link to="/services" className="hover:text-accent transition-colors">Website Design</Link></li>
             <li><Link to="/services" className="hover:text-accent transition-colors">Organic Social Growth</Link></li>
           </ul>
         </nav>
         <nav aria-label="Company">
           <h4 className="font-display text-sm font-semibold mb-4 text-foreground/80">Company</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><Link to="/about" className="hover:text-accent transition-colors">About Clowd Marketing</Link></li>
+            <li><Link to="/about" className="hover:text-accent transition-colors">About Us</Link></li>
             <li><Link to="/pricing" className="hover:text-accent transition-colors">Pricing</Link></li>
             <li><Link to="/portal" className="hover:text-accent transition-colors">Client Portal</Link></li>
           </ul>
@@ -35,14 +35,15 @@ const Footer = () => (
         <nav aria-label="Get started">
           <h4 className="font-display text-sm font-semibold mb-4 text-foreground/80">Get Started</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><Link to="/estimate" className="hover:text-accent transition-colors">Get an Estimate</Link></li>
+            <li><Link to="/estimate" className="hover:text-accent transition-colors">Free Strategy & Estimate</Link></li>
             <li><Link to="/auth" className="hover:text-accent transition-colors">Create Account</Link></li>
-            <li><Link to="/auth" className="hover:text-accent transition-colors">Dashboard Login</Link></li>
+            <li><Link to="/auth" className="hover:text-accent transition-colors">Client Login</Link></li>
           </ul>
         </nav>
       </div>
-      <div className="border-t border-border mt-12 pt-8 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Clowd Marketing (ClowdMarketing). All rights reserved.
+      <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+        <span>© {new Date().getFullYear()} Clowd Marketing. All rights reserved.</span>
+        <span>Performance-driven digital marketing for ambitious businesses.</span>
       </div>
     </div>
   </footer>

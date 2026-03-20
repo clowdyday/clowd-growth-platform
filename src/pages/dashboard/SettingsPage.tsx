@@ -37,16 +37,16 @@ const SettingsPage = () => {
       })
       .eq("id", profile.id);
     setSaving(false);
-    toast({ title: "Profile updated" });
+    toast({ title: "Profile updated successfully" });
   };
 
   if (!profile) return null;
 
   const fields = [
-    { key: "full_name", label: "Full Name", placeholder: "John Smith" },
-    { key: "company_name", label: "Company Name", placeholder: "Apex Roofing" },
-    { key: "industry", label: "Industry", placeholder: "Roofing" },
-    { key: "location", label: "Location", placeholder: "Dallas, TX" },
+    { key: "full_name", label: "Full Name", placeholder: "Jane Smith" },
+    { key: "company_name", label: "Company Name", placeholder: "Your Company Name" },
+    { key: "industry", label: "Industry", placeholder: "e.g. E-Commerce, SaaS, Health & Wellness" },
+    { key: "location", label: "Location", placeholder: "City, State or Country" },
     { key: "phone", label: "Phone", placeholder: "(555) 123-4567" },
   ] as const;
 
@@ -55,14 +55,14 @@ const SettingsPage = () => {
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center gap-3 mb-1">
           <Settings className="w-6 h-6 text-accent" />
-          <h1 className="font-display text-2xl font-bold text-foreground">Settings</h1>
+          <h1 className="font-display text-2xl font-bold text-foreground">Account Settings</h1>
         </div>
         <p className="text-muted-foreground text-sm">Update your profile and business information.</p>
       </motion.div>
 
       <div className="glass-card p-8 space-y-5">
         <div className="text-sm text-muted-foreground mb-2">
-          Email: <span className="text-foreground">{user?.email}</span>
+          Account Email: <span className="text-foreground font-medium">{user?.email}</span>
         </div>
         {fields.map((field) => (
           <div key={field.key}>

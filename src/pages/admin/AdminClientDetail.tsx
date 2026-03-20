@@ -27,9 +27,9 @@ import {
 } from "@/components/onboarding/onboardingConfigs";
 
 const serviceLabels: Record<string, string> = {
-  ad_management: "Ad Management",
-  website: "Website Creation",
-  organic_social: "Organic Social Media",
+  ad_management: "Performance Ad Management",
+  website: "Website Design & Development",
+  organic_social: "Organic Social Media Growth",
 };
 
 const serviceIcons: Record<string, any> = {

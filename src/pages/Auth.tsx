@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import clowdLogo from "@/assets/clowd-logo.png";
 
@@ -15,6 +15,7 @@ const AuthPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [otpStep, setOtpStep] = useState(false);
@@ -22,7 +23,7 @@ const AuthPage = () => {
   const { signIn, signUp, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect to dashboard if already authenticated (e.g. after OAuth callback)
+  // Redirect to dashboard if already authenticated
   useEffect(() => {
     if (!authLoading && user) {
       navigate("/dashboard", { replace: true });
@@ -33,11 +34,15 @@ const AuthPage = () => {
     e.preventDefault();
     setError("");
 
-    const trimmedEmail = email.trim();
+    const trimmedEmail = email.trim().toLowerCase();
     const trimmedName = fullName.trim();
 
     if (!trimmedEmail) {
-      setError("Email is required.");
+      setError("Please enter your email address.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      setError("Please enter a valid email address.");
       return;
     }
     if (password.length < 6) {
@@ -45,7 +50,7 @@ const AuthPage = () => {
       return;
     }
     if (!isLogin && !trimmedName) {
-      setError("Full name is required.");
+      setError("Please enter your full name.");
       return;
     }
     if (!isLogin && trimmedName.length > 100) {
@@ -57,12 +62,28 @@ const AuthPage = () => {
 
     if (isLogin) {
       const { error } = await signIn(trimmedEmail, password);
-      if (error) setError(error.message);
-      else navigate("/dashboard");
+      if (error) {
+        if (error.message?.toLowerCase().includes("invalid login")) {
+          setError("Incorrect email or password. Please try again.");
+        } else if (error.message?.toLowerCase().includes("email not confirmed")) {
+          setError("Please verify your email before signing in.");
+        } else {
+          setError(error.message || "Sign in failed. Please try again.");
+        }
+      } else {
+        navigate("/dashboard");
+      }
     } else {
       const { error } = await signUp(trimmedEmail, password, trimmedName);
-      if (error) setError(error.message);
-      else setOtpStep(true);
+      if (error) {
+        if (error.message?.toLowerCase().includes("already registered")) {
+          setError("An account with this email already exists. Please sign in.");
+        } else {
+          setError(error.message || "Account creation failed. Please try again.");
+        }
+      } else {
+        setOtpStep(true);
+      }
     }
     setLoading(false);
   };
@@ -72,12 +93,16 @@ const AuthPage = () => {
     if (otpCode.length < 6) return;
     setLoading(true);
     const { error } = await supabase.auth.verifyOtp({
-      email: email.trim(),
+      email: email.trim().toLowerCase(),
       token: otpCode,
       type: "signup",
     });
     if (error) {
-      setError(error.message);
+      if (error.message?.toLowerCase().includes("expired")) {
+        setError("Verification code expired. Please request a new one.");
+      } else {
+        setError(error.message || "Verification failed. Please check the code and try again.");
+      }
     } else {
       navigate("/dashboard");
     }
@@ -91,7 +116,24 @@ const AuthPage = () => {
       redirect_uri: window.location.origin + "/auth",
     });
     if (result.error) {
-      setError(result.error.message || "Google sign-in failed");
+      setError(result.error.message || "Google sign-in failed. Please try again.");
+      setLoading(false);
+    }
+    // Note: on success, the page will redirect to Google — no need to setLoading(false)
+  };
+
+  const handleResendOtp = async () => {
+    setError("");
+    setLoading(true);
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email: email.trim().toLowerCase(),
+    });
+    if (error) {
+      setError(error.message || "Failed to resend code. Please try again.");
+    } else {
+      setError("");
+      setOtpCode("");
     }
     setLoading(false);
   };
@@ -109,9 +151,11 @@ const AuthPage = () => {
           className="glass-card p-10 max-w-md w-full text-center"
         >
           <img src={clowdLogo} alt="Clowd Marketing" className="h-12 w-12 mx-auto mb-4" width={48} height={48} />
-          <h1 className="font-display text-2xl font-bold text-foreground mb-3">Verify Your Email</h1>
+          <h1 className="font-display text-2xl font-bold text-foreground mb-3">Check Your Email</h1>
           <p className="text-muted-foreground text-sm mb-6">
-            We sent a 6-digit code to <strong className="text-foreground">{email}</strong>. Enter it below to verify your account.
+            We sent a 6-digit verification code to{" "}
+            <strong className="text-foreground">{email}</strong>.
+            Enter it below to activate your account.
           </p>
           <div className="flex justify-center mb-6">
             <InputOTP maxLength={6} value={otpCode} onChange={setOtpCode}>
@@ -128,16 +172,27 @@ const AuthPage = () => {
           {error && (
             <p className="text-sm text-destructive bg-destructive/10 rounded-lg px-4 py-2 mb-4" role="alert">{error}</p>
           )}
-          <Button variant="cta" size="lg" className="w-full" onClick={handleVerifyOtp} disabled={loading || otpCode.length < 6}>
-            {loading ? "Verifying..." : "Verify & Continue"}
+          <Button variant="cta" size="lg" className="w-full mb-3" onClick={handleVerifyOtp} disabled={loading || otpCode.length < 6}>
+            {loading ? "Verifying..." : "Verify & Access Dashboard"}
             <ArrowRight className="ml-1" />
           </Button>
           <button
-            onClick={() => { setOtpStep(false); setIsLogin(true); setError(""); }}
-            className="mt-4 text-sm text-muted-foreground hover:text-foreground"
+            onClick={handleResendOtp}
+            disabled={loading}
+            className="text-sm text-accent hover:underline disabled:opacity-50"
+            type="button"
           >
-            Back to Login
+            Resend verification code
           </button>
+          <div className="mt-3">
+            <button
+              onClick={() => { setOtpStep(false); setIsLogin(true); setError(""); setOtpCode(""); }}
+              className="text-sm text-muted-foreground hover:text-foreground"
+              type="button"
+            >
+              Back to Sign In
+            </button>
+          </div>
         </motion.div>
       </div>
     );
@@ -147,7 +202,7 @@ const AuthPage = () => {
     <div className="gradient-hero min-h-screen flex items-center justify-center px-4">
       <Helmet>
         <title>{isLogin ? "Sign In" : "Create Account"} — Clowd Marketing</title>
-        <meta name="description" content={isLogin ? "Sign in to your Clowd Marketing client portal." : "Create your Clowd Marketing account and start growing your business."} />
+        <meta name="description" content={isLogin ? "Sign in to your Clowd Marketing client portal." : "Create your Clowd Marketing account and start growing your business today."} />
         <meta name="robots" content="noindex" />
       </Helmet>
       <motion.div
@@ -160,10 +215,10 @@ const AuthPage = () => {
             <img src={clowdLogo} alt="Clowd Marketing" className="h-12 w-12 mx-auto mb-4" width={48} height={48} />
           </Link>
           <h1 className="font-display text-2xl font-bold text-foreground">
-            {isLogin ? "Welcome Back" : "Create Your Account"}
+            {isLogin ? "Welcome Back" : "Start Growing Today"}
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {isLogin ? "Sign in to your client portal" : "Get started with Clowd Marketing"}
+            {isLogin ? "Sign in to your client portal" : "Create your Clowd Marketing account"}
           </p>
         </div>
 
@@ -187,7 +242,7 @@ const AuthPage = () => {
 
         <div className="flex items-center gap-3 mb-4">
           <div className="h-px flex-1 bg-border" />
-          <span className="text-xs text-muted-foreground">or</span>
+          <span className="text-xs text-muted-foreground">or continue with email</span>
           <div className="h-px flex-1 bg-border" />
         </div>
 
@@ -202,14 +257,14 @@ const AuthPage = () => {
                 onChange={(e) => setFullName(e.target.value)}
                 required
                 maxLength={100}
-                placeholder="John Smith"
+                placeholder="Jane Smith"
                 autoComplete="name"
                 className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none transition-colors text-sm"
               />
             </div>
           )}
           <div>
-            <label htmlFor="email" className="text-sm font-semibold text-foreground mb-1.5 block">Email</label>
+            <label htmlFor="email" className="text-sm font-semibold text-foreground mb-1.5 block">Email Address</label>
             <input
               id="email"
               type="email"
@@ -224,18 +279,31 @@ const AuthPage = () => {
           </div>
           <div>
             <label htmlFor="password" className="text-sm font-semibold text-foreground mb-1.5 block">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="••••••••"
-              minLength={6}
-              maxLength={128}
-              autoComplete={isLogin ? "current-password" : "new-password"}
-              className="w-full px-4 py-3 rounded-xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none transition-colors text-sm"
-            />
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+                minLength={6}
+                maxLength={128}
+                autoComplete={isLogin ? "current-password" : "new-password"}
+                className="w-full px-4 py-3 pr-12 rounded-xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none transition-colors text-sm"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+            {!isLogin && (
+              <p className="text-xs text-muted-foreground mt-1">Minimum 6 characters</p>
+            )}
           </div>
 
           {error && (
@@ -251,13 +319,19 @@ const AuthPage = () => {
         <div className="mt-6 text-center text-sm text-muted-foreground">
           {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
           <button
-            onClick={() => { setIsLogin(!isLogin); setError(""); }}
+            onClick={() => { setIsLogin(!isLogin); setError(""); setPassword(""); }}
             className="text-accent font-semibold hover:underline"
             type="button"
           >
-            {isLogin ? "Sign Up" : "Sign In"}
+            {isLogin ? "Sign Up Free" : "Sign In"}
           </button>
         </div>
+
+        {!isLogin && (
+          <p className="text-xs text-muted-foreground text-center mt-4">
+            By creating an account, you agree to our terms of service and privacy policy.
+          </p>
+        )}
       </motion.div>
     </div>
   );

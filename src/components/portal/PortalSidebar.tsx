@@ -22,8 +22,8 @@ import {
 
 const serviceConfig = {
   ad_management: { label: "Ad Management", icon: BarChart3, path: "/dashboard/ads", color: "text-accent" },
-  website: { label: "Website", icon: Globe, path: "/dashboard/website", color: "text-secondary" },
-  organic_social: { label: "Organic Social", icon: TrendingUp, path: "/dashboard/organic", color: "text-green-400" },
+  website: { label: "Website Design", icon: Globe, path: "/dashboard/website", color: "text-secondary" },
+  organic_social: { label: "Social Media", icon: TrendingUp, path: "/dashboard/organic", color: "text-green-400" },
 } as const;
 
 interface PortalSidebarProps {
@@ -41,7 +41,7 @@ export function PortalSidebar({ services, onSignOut }: PortalSidebarProps) {
     <Sidebar collapsible="icon" className="border-r border-border">
       <div className="h-14 flex items-center px-4 border-b border-border shrink-0">
         <Link to="/" className="flex items-center gap-2">
-          <img src={clowdLogo} alt="Clowd" className="h-7 w-7 shrink-0" />
+          <img src={clowdLogo} alt="Clowd Marketing" className="h-7 w-7 shrink-0" />
           {!collapsed && (
             <span className="font-display text-lg font-bold text-foreground">
               Clowd<span className="text-accent">.</span>
