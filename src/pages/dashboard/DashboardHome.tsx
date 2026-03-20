@@ -55,7 +55,7 @@ const DashboardHome = () => {
   const { user } = useAuth();
   const [adding, setAdding] = useState<string | null>(null);
   const [showBrief, setShowBrief] = useState(false);
-  const [allOnboarding, setAllOnboarding] = useState<{ field_name: string; field_value: string }[]>([]);
+  const [allOnboarding, setAllOnboarding] = useState<{ step_key: string; step_data: Record<string, string> | null }[]>([]);
   const { generate, loading: aiLoading, result: aiResult, error: aiError, reset: aiReset } = useAI();
 
   const activeTypes = services.map((s) => s.service_type);

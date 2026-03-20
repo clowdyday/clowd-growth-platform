@@ -53,8 +53,9 @@ const AdsDashboard = () => {
 
   // Pull business info from onboarding data
   const getOnboardingValue = (key: string) => {
-    const entry = onboarding.find((o) => o.field_name === key);
-    return entry?.field_value || "";
+    const entry = onboarding.find((o) => o.step_key === key);
+    const data = entry?.step_data as Record<string, string> | null;
+    return data?.value || data?.[key] || "";
   };
 
   const handleGenerateCopy = () => {
