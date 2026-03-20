@@ -15,6 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import type { Tables } from "@/integrations/supabase/types";
 import { useToast } from "@/hooks/use-toast";
+import { AIOnboardingAssistant } from "./AIOnboardingAssistant";
 
 export interface OnboardingField {
   name: string;
@@ -39,6 +40,7 @@ interface OnboardingFormProps {
   setOnboarding: (data: Tables<"service_onboarding">[]) => void;
   onAllComplete: () => void;
   accentClass?: string;
+  serviceType?: "ads" | "website" | "organic";
 }
 
 export function OnboardingForm({
@@ -48,10 +50,12 @@ export function OnboardingForm({
   setOnboarding,
   onAllComplete,
   accentClass = "bg-accent",
+  serviceType = "ads",
 }: OnboardingFormProps) {
   const { user } = useAuth();
   const { toast } = useToast();
   const [activeStep, setActiveStep] = useState<string | null>(null);
+  const [activeFieldLabel, setActiveFieldLabel] = useState<string | undefined>(undefined);
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
 
@@ -60,20 +64,23 @@ export function OnboardingForm({
   const handleOpenStep = (stepKey: string) => {
     const existing = onboarding.find((o) => o.step_key === stepKey);
     if (existing?.completed) return;
-    // Pre-fill from existing step_data
     const existingData = existing?.step_data as Record<string, string> | null;
     setFormData(existingData || {});
     setActiveStep(stepKey);
+    setActiveFieldLabel(undefined);
   };
 
   const handleFieldChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleFieldFocus = (label: string) => {
+    setActiveFieldLabel(label);
+  };
+
   const handleSaveStep = async (stepKey: string, stepFields: OnboardingField[]) => {
     if (!user) return;
 
-    // Validate required fields
     for (const field of stepFields) {
       if (field.required && !formData[field.name]?.trim()) {
         toast({ title: `${field.label} is required`, variant: "destructive" });
@@ -111,120 +118,136 @@ export function OnboardingForm({
 
     setSaving(false);
     setActiveStep(null);
+    setActiveFieldLabel(undefined);
     toast({ title: "Step completed!" });
 
-    // Check if all done
     const newCompleted = completedSteps + (existing?.completed ? 0 : 1);
     if (newCompleted >= steps.length) {
       onAllComplete();
     }
   };
 
+  const activeStepConfig = steps.find((s) => s.key === activeStep);
+
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="font-display text-lg font-bold text-foreground">Onboarding Progress</h2>
-        <span className="text-sm text-muted-foreground">
-          {completedSteps}/{steps.length} complete
-        </span>
-      </div>
-      <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
-        <div
-          className={`h-full ${accentClass} rounded-full transition-all duration-500`}
-          style={{ width: `${(completedSteps / steps.length) * 100}%` }}
-        />
-      </div>
-      <div className="space-y-3">
-        {steps.map((step, i) => {
-          const completed = onboarding.some((o) => o.step_key === step.key && o.completed);
-          const isOpen = activeStep === step.key;
+    <>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="font-display text-lg font-bold text-foreground">Onboarding Progress</h2>
+          <span className="text-sm text-muted-foreground">
+            {completedSteps}/{steps.length} complete
+          </span>
+        </div>
+        <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+          <div
+            className={`h-full ${accentClass} rounded-full transition-all duration-500`}
+            style={{ width: `${(completedSteps / steps.length) * 100}%` }}
+          />
+        </div>
+        <div className="space-y-3">
+          {steps.map((step, i) => {
+            const completed = onboarding.some((o) => o.step_key === step.key && o.completed);
+            const isOpen = activeStep === step.key;
 
-          return (
-            <div key={step.key} className="glass-card overflow-hidden transition-all">
-              <button
-                onClick={() => (isOpen ? setActiveStep(null) : handleOpenStep(step.key))}
-                className={`w-full p-5 flex items-center gap-4 text-left transition-all ${
-                  completed ? "opacity-60" : "hover:bg-muted/30 cursor-pointer"
-                }`}
-                disabled={completed}
-              >
-                {completed ? (
-                  <CheckCircle2 className="w-5 h-5 text-green-400 shrink-0" />
-                ) : (
-                  <Circle className="w-5 h-5 text-muted-foreground shrink-0" />
+            return (
+              <div key={step.key} className="glass-card overflow-hidden transition-all">
+                <button
+                  onClick={() => (isOpen ? setActiveStep(null) : handleOpenStep(step.key))}
+                  className={`w-full p-5 flex items-center gap-4 text-left transition-all ${
+                    completed ? "opacity-60" : "hover:bg-muted/30 cursor-pointer"
+                  }`}
+                  disabled={completed}
+                >
+                  {completed ? (
+                    <CheckCircle2 className="w-5 h-5 text-green-400 shrink-0" />
+                  ) : (
+                    <Circle className="w-5 h-5 text-muted-foreground shrink-0" />
+                  )}
+                  <div className="flex-1">
+                    <div className="font-semibold text-sm text-foreground">{step.label}</div>
+                    <div className="text-xs text-muted-foreground">{step.desc}</div>
+                  </div>
+                  {!completed && (
+                    <ChevronRight
+                      className={`w-4 h-4 text-muted-foreground transition-transform ${
+                        isOpen ? "rotate-90" : ""
+                      }`}
+                    />
+                  )}
+                  <span className="text-xs text-muted-foreground">Step {i + 1}</span>
+                </button>
+
+                {isOpen && !completed && (
+                  <div className="px-5 pb-5 pt-2 border-t border-border space-y-4">
+                    {step.fields.map((field) => (
+                      <div key={field.name}>
+                        <Label className="text-sm font-semibold text-foreground mb-1.5 block">
+                          {field.label}
+                          {field.required && <span className="text-destructive ml-1">*</span>}
+                        </Label>
+
+                        {field.type === "select" ? (
+                          <Select
+                            value={formData[field.name] || ""}
+                            onValueChange={(val) => handleFieldChange(field.name, val)}
+                          >
+                            <SelectTrigger
+                              className="w-full"
+                              onFocus={() => handleFieldFocus(field.label)}
+                            >
+                              <SelectValue placeholder={field.placeholder || "Select..."} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {field.options?.map((opt) => (
+                                <SelectItem key={opt.value} value={opt.value}>
+                                  {opt.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        ) : field.type === "textarea" ? (
+                          <Textarea
+                            value={formData[field.name] || ""}
+                            onChange={(e) => handleFieldChange(field.name, e.target.value)}
+                            onFocus={() => handleFieldFocus(field.label)}
+                            placeholder={field.placeholder}
+                            className="min-h-[80px]"
+                          />
+                        ) : (
+                          <Input
+                            type={field.type}
+                            value={formData[field.name] || ""}
+                            onChange={(e) => handleFieldChange(field.name, e.target.value)}
+                            onFocus={() => handleFieldFocus(field.label)}
+                            placeholder={field.placeholder}
+                          />
+                        )}
+                      </div>
+                    ))}
+
+                    <Button
+                      variant="cta"
+                      size="sm"
+                      onClick={() => handleSaveStep(step.key, step.fields)}
+                      disabled={saving}
+                    >
+                      <Save className="mr-1 w-4 h-4" />
+                      {saving ? "Saving..." : "Save & Complete Step"}
+                    </Button>
+                  </div>
                 )}
-                <div className="flex-1">
-                  <div className="font-semibold text-sm text-foreground">{step.label}</div>
-                  <div className="text-xs text-muted-foreground">{step.desc}</div>
-                </div>
-                {!completed && (
-                  <ChevronRight
-                    className={`w-4 h-4 text-muted-foreground transition-transform ${
-                      isOpen ? "rotate-90" : ""
-                    }`}
-                  />
-                )}
-                <span className="text-xs text-muted-foreground">Step {i + 1}</span>
-              </button>
-
-              {isOpen && !completed && (
-                <div className="px-5 pb-5 pt-2 border-t border-border space-y-4">
-                  {step.fields.map((field) => (
-                    <div key={field.name}>
-                      <Label className="text-sm font-semibold text-foreground mb-1.5 block">
-                        {field.label}
-                        {field.required && <span className="text-destructive ml-1">*</span>}
-                      </Label>
-
-                      {field.type === "select" ? (
-                        <Select
-                          value={formData[field.name] || ""}
-                          onValueChange={(val) => handleFieldChange(field.name, val)}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder={field.placeholder || "Select..."} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {field.options?.map((opt) => (
-                              <SelectItem key={opt.value} value={opt.value}>
-                                {opt.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      ) : field.type === "textarea" ? (
-                        <Textarea
-                          value={formData[field.name] || ""}
-                          onChange={(e) => handleFieldChange(field.name, e.target.value)}
-                          placeholder={field.placeholder}
-                          className="min-h-[80px]"
-                        />
-                      ) : (
-                        <Input
-                          type={field.type}
-                          value={formData[field.name] || ""}
-                          onChange={(e) => handleFieldChange(field.name, e.target.value)}
-                          placeholder={field.placeholder}
-                        />
-                      )}
-                    </div>
-                  ))}
-
-                  <Button
-                    variant="cta"
-                    size="sm"
-                    onClick={() => handleSaveStep(step.key, step.fields)}
-                    disabled={saving}
-                  >
-                    <Save className="mr-1 w-4 h-4" />
-                    {saving ? "Saving..." : "Save & Complete Step"}
-                  </Button>
-                </div>
-              )}
-            </div>
-          );
-        })}
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </div>
+
+      {/* AI Onboarding Assistant — floats over the page */}
+      <AIOnboardingAssistant
+        currentStepTitle={activeStepConfig?.label}
+        currentFieldLabel={activeFieldLabel}
+        serviceType={serviceType}
+      />
+    </>
   );
 }

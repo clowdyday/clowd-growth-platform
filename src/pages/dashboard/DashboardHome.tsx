@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useOutletContext, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import type { ClientService } from "@/pages/DashboardLayout";
-import { BarChart3, Globe, TrendingUp, Plus, ArrowRight, Sparkles } from "lucide-react";
+import {
+  BarChart3, Globe, TrendingUp, Plus, ArrowRight, Sparkles,
+  FileText, Loader2, Copy, RefreshCw, ChevronDown, ChevronUp,
+} from "lucide-react";
+import { useAI } from "@/hooks/useAI";
+import { toast } from "sonner";
+import ReactMarkdown from "react-markdown";
 
 const serviceOptions = [
   {
@@ -48,8 +54,31 @@ const DashboardHome = () => {
   }>();
   const { user } = useAuth();
   const [adding, setAdding] = useState<string | null>(null);
+  const [showBrief, setShowBrief] = useState(false);
+  const [allOnboarding, setAllOnboarding] = useState<{ field_name: string; field_value: string }[]>([]);
+  const { generate, loading: aiLoading, result: aiResult, error: aiError, reset: aiReset } = useAI();
 
   const activeTypes = services.map((s) => s.service_type);
+  const firstName = user?.user_metadata?.full_name?.split(" ")[0] || "there";
+
+  // Load all onboarding data across all services for the strategy brief
+  useEffect(() => {
+    if (!user || services.length === 0) return;
+    const loadAllOnboarding = async () => {
+      const serviceIds = services.map((s) => s.id);
+      const { data } = await supabase
+        .from("service_onboarding")
+        .select("field_name, field_value")
+        .in("service_id", serviceIds);
+      setAllOnboarding(data || []);
+    };
+    loadAllOnboarding();
+  }, [user, services]);
+
+  const getField = (key: string) => {
+    const entry = allOnboarding.find((o) => o.field_name === key);
+    return entry?.field_value || "";
+  };
 
   const handleAddService = async (type: "ad_management" | "website" | "organic_social") => {
     if (!user) return;
@@ -59,13 +88,34 @@ const DashboardHome = () => {
       .insert({ user_id: user.id, service_type: type, status: "onboarding" })
       .select()
       .single();
-    if (data) {
-      setServices([...services, data]);
-    }
+    if (data) setServices([...services, data]);
     setAdding(null);
   };
 
-  const firstName = user?.user_metadata?.full_name?.split(" ")[0] || "there";
+  const handleGenerateBrief = () => {
+    aiReset();
+    const adService = services.find((s) => s.service_type === "ad_management");
+    generate("strategy_brief", {
+      company_name: getField("company_name") || user?.email?.split("@")[0] || "Your Business",
+      industry: getField("industry") || "General Business",
+      location: getField("location") || "United States",
+      goals: getField("campaign_goal") || getField("goals") || "Generate leads and grow revenue",
+      monthly_budget: adService?.monthly_ad_spend || getField("monthly_budget") || "Not specified",
+      campaign_type: getField("campaign_type") || activeTypes.join(", ") || "Digital Marketing",
+      age_range: getField("age_range") || "25-54",
+      targeting_gender: getField("targeting_gender") || "All",
+      interests: getField("interests") || getField("target_audience"),
+      platforms: getField("platforms") || "Google & Meta",
+      website_url: getField("website_url") || getField("current_website"),
+    });
+  };
+
+  const handleCopyBrief = () => {
+    if (aiResult) {
+      navigator.clipboard.writeText(aiResult);
+      toast.success("Strategy brief copied to clipboard!");
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -119,6 +169,84 @@ const DashboardHome = () => {
         </div>
       )}
 
+      {/* AI Strategy Brief Generator — only show when at least one service exists */}
+      {services.length > 0 && (
+        <div className="glass-card border border-accent/20 overflow-hidden">
+          <button
+            type="button"
+            className="w-full p-6 flex items-center justify-between hover:bg-accent/5 transition-colors"
+            onClick={() => setShowBrief(!showBrief)}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-accent/10 flex items-center justify-center">
+                <FileText className="w-5 h-5 text-accent" />
+              </div>
+              <div className="text-left">
+                <div className="flex items-center gap-2">
+                  <div className="font-display font-bold text-foreground">AI Strategy Brief</div>
+                  <span className="text-[10px] font-bold tracking-wider uppercase bg-accent/20 text-accent px-2 py-0.5 rounded-full">New</span>
+                </div>
+                <div className="text-xs text-muted-foreground">Generate a personalized 90-day marketing strategy brief for your business</div>
+              </div>
+            </div>
+            {showBrief ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+          </button>
+
+          {showBrief && (
+            <div className="px-6 pb-6 space-y-5 border-t border-border">
+              <p className="text-sm text-muted-foreground pt-5">
+                Your strategy brief is generated using your onboarding data. The more onboarding steps you complete, the more personalized and detailed your brief will be.
+              </p>
+
+              <div className="flex gap-3">
+                <Button
+                  variant="hero-primary"
+                  size="sm"
+                  onClick={handleGenerateBrief}
+                  disabled={aiLoading}
+                  className="flex-1"
+                >
+                  {aiLoading ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating Brief...</>
+                  ) : (
+                    <><Sparkles className="w-4 h-4 mr-2" /> Generate 90-Day Strategy Brief</>
+                  )}
+                </Button>
+                {aiResult && (
+                  <>
+                    <Button variant="hero-secondary" size="sm" onClick={handleCopyBrief}>
+                      <Copy className="w-4 h-4 mr-1" /> Copy
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={handleGenerateBrief} disabled={aiLoading}>
+                      <RefreshCw className="w-4 h-4" />
+                    </Button>
+                  </>
+                )}
+              </div>
+
+              {aiError && (
+                <div className="text-sm text-destructive bg-destructive/10 rounded-xl p-4">{aiError}</div>
+              )}
+
+              {aiLoading && (
+                <div className="flex items-center gap-3 py-4">
+                  <Loader2 className="w-4 h-4 text-accent animate-spin" />
+                  <span className="text-sm text-muted-foreground">Analyzing your business and building a 90-day strategy...</span>
+                </div>
+              )}
+
+              {aiResult && !aiLoading && (
+                <div className="bg-muted rounded-xl p-6 max-h-[600px] overflow-y-auto">
+                  <div className="prose prose-sm prose-invert max-w-none text-muted-foreground leading-relaxed">
+                    <ReactMarkdown>{aiResult}</ReactMarkdown>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Add Services */}
       {activeTypes.length < 3 && (
         <div className="space-y-4">
@@ -147,7 +275,9 @@ const DashboardHome = () => {
                     disabled={adding !== null}
                   >
                     {adding === option.type ? (
-                      <span className="flex items-center gap-1"><span className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" /> Adding...</span>
+                      <span className="flex items-center gap-1">
+                        <span className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" /> Adding...
+                      </span>
                     ) : (
                       <><Plus className="mr-1 w-3 h-3" /> Add Service</>
                     )}
@@ -158,7 +288,7 @@ const DashboardHome = () => {
         </div>
       )}
 
-      {/* Empty state prompt */}
+      {/* Empty state */}
       {services.length === 0 && (
         <div className="glass-card p-8 text-center border border-dashed border-border">
           <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-4">

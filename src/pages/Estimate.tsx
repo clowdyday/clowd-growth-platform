@@ -3,10 +3,15 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ArrowLeft, CheckCircle2, Rocket, Upload, Loader2 } from "lucide-react";
+import {
+  ArrowRight, ArrowLeft, CheckCircle2, Rocket, Upload,
+  Loader2, Sparkles, RefreshCw,
+} from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAI } from "@/hooks/useAI";
+import ReactMarkdown from "react-markdown";
 
 // Stripe price IDs
 const PRICE_IDS = {
@@ -18,16 +23,9 @@ const PRICE_IDS = {
 };
 
 const industries = [
-  "E-Commerce",
-  "Health & Wellness",
-  "Professional Services",
-  "Real Estate",
-  "SaaS / Technology",
-  "Retail & Local Business",
-  "Education & Coaching",
-  "Home Services",
-  "Hospitality & Food",
-  "Other",
+  "E-Commerce", "Health & Wellness", "Professional Services",
+  "Real Estate", "SaaS / Technology", "Retail & Local Business",
+  "Education & Coaching", "Home Services", "Hospitality & Food", "Other",
 ];
 
 const websiteOptions = [
@@ -64,6 +62,8 @@ const EstimatePage = () => {
   const [showResults, setShowResults] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { generate, loading: aiLoading, result: aiResult, error: aiError, reset: aiReset } = useAI();
+
   const [form, setForm] = useState<FormData>({
     industry: "",
     location: "",
@@ -91,16 +91,29 @@ const EstimatePage = () => {
     switch (step) {
       case 0: return form.industry && form.location.trim() && form.companyName.trim();
       case 1: return selectedServices().length > 0;
-      case 2: return true;
-      case 3: return true;
-      case 4: return true;
-      default: return false;
+      default: return true;
     }
   };
 
   const handleNext = () => {
     if (step < totalSteps - 1) setStep(step + 1);
-    else setShowResults(true);
+    else {
+      setShowResults(true);
+      // Auto-trigger AI recommendation
+      handleAIRecommendation();
+    }
+  };
+
+  const handleAIRecommendation = () => {
+    aiReset();
+    generate("estimate_recommendation", {
+      industry: form.industry,
+      businessType: form.companyName,
+      budget: form.adBudget,
+      goal: selectedServices().join(", ") || "General marketing growth",
+      location: form.location,
+      notes: form.notes,
+    });
   };
 
   const adFee = form.wantAds ? form.adBudget * 0.1 : 0;
@@ -143,9 +156,7 @@ const EstimatePage = () => {
         },
       });
       if (error) throw error;
-      if (data?.url) {
-        window.open(data.url, "_blank");
-      }
+      if (data?.url) window.open(data.url, "_blank");
     } catch (err: any) {
       toast.error(err.message || "Failed to create checkout session. Please try again.");
     } finally {
@@ -160,9 +171,7 @@ const EstimatePage = () => {
       type="button"
       onClick={onClick}
       className={`p-4 rounded-xl border-2 text-left transition-all duration-200 ${
-        selected
-          ? "border-accent bg-accent/10"
-          : "border-border bg-card hover:border-accent/30"
+        selected ? "border-accent bg-accent/10" : "border-border bg-card hover:border-accent/30"
       }`}
     >
       <div className="flex justify-between items-start">
@@ -186,9 +195,9 @@ const EstimatePage = () => {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-2xl mx-auto"
+            className="max-w-2xl mx-auto space-y-6"
           >
-            <div className="text-center mb-10">
+            <div className="text-center mb-4">
               <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-5">
                 <CheckCircle2 className="w-8 h-8 text-accent" aria-hidden="true" />
               </div>
@@ -200,6 +209,7 @@ const EstimatePage = () => {
               </p>
             </div>
 
+            {/* Pricing Summary */}
             <div className="glass-card p-8 glow-accent space-y-6">
               {form.wantAds && (
                 <div className="flex justify-between items-center pb-4 border-b border-border">
@@ -210,7 +220,6 @@ const EstimatePage = () => {
                   <div className="font-display text-xl font-bold text-foreground">${adFee.toLocaleString()}/mo</div>
                 </div>
               )}
-
               {form.websitePackage !== "none" && (
                 <div className="flex justify-between items-center pb-4 border-b border-border">
                   <div>
@@ -222,7 +231,6 @@ const EstimatePage = () => {
                   </div>
                 </div>
               )}
-
               {form.organicPackage !== "none" && (
                 <div className="flex justify-between items-center pb-4 border-b border-border">
                   <div>
@@ -232,7 +240,6 @@ const EstimatePage = () => {
                   <div className="font-display text-xl font-bold text-foreground">${orgPkg?.price?.toLocaleString()}/mo</div>
                 </div>
               )}
-
               <div className="bg-muted rounded-xl p-6 space-y-3">
                 {monthlyTotal > 0 && (
                   <div className="flex justify-between items-center">
@@ -247,7 +254,6 @@ const EstimatePage = () => {
                   </div>
                 )}
               </div>
-
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
                 <Button
                   variant="hero-primary"
@@ -261,21 +267,63 @@ const EstimatePage = () => {
                   ) : user ? (
                     <>Get Started Now <ArrowRight className="ml-1" /></>
                   ) : (
-                    <>Create Account & Get Started <ArrowRight className="ml-1" /></>
+                    <>Create Account to Start <ArrowRight className="ml-1" /></>
                   )}
                 </Button>
                 <Button
                   variant="hero-secondary"
                   size="lg"
-                  onClick={() => { setShowResults(false); setStep(0); }}
+                  onClick={() => { setShowResults(false); setStep(0); aiReset(); }}
                 >
                   Recalculate
                 </Button>
               </div>
-
               <p className="text-xs text-muted-foreground text-center pt-2">
                 No contracts. No hidden fees. Cancel anytime on monthly services.
               </p>
+            </div>
+
+            {/* AI Strategy Recommendation */}
+            <div className="glass-card p-8 border border-accent/20">
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-accent/10 flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 text-accent" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h2 className="font-display text-lg font-bold text-foreground">AI Strategy Recommendation</h2>
+                    <p className="text-xs text-muted-foreground">Personalized for {form.companyName}</p>
+                  </div>
+                </div>
+                {!aiLoading && (
+                  <button
+                    onClick={handleAIRecommendation}
+                    className="text-xs text-muted-foreground hover:text-accent flex items-center gap-1 transition-colors"
+                    type="button"
+                  >
+                    <RefreshCw className="w-3 h-3" /> Regenerate
+                  </button>
+                )}
+              </div>
+
+              {aiLoading && (
+                <div className="flex items-center gap-3 py-6">
+                  <Loader2 className="w-5 h-5 text-accent animate-spin" />
+                  <span className="text-sm text-muted-foreground">Analyzing your business and building a personalized strategy...</span>
+                </div>
+              )}
+
+              {aiError && (
+                <div className="text-sm text-destructive bg-destructive/10 rounded-xl p-4">
+                  {aiError} — <button onClick={handleAIRecommendation} className="underline hover:text-foreground" type="button">Try again</button>
+                </div>
+              )}
+
+              {aiResult && !aiLoading && (
+                <div className="prose prose-sm prose-invert max-w-none text-muted-foreground leading-relaxed">
+                  <ReactMarkdown>{aiResult}</ReactMarkdown>
+                </div>
+              )}
             </div>
           </motion.div>
         </div>
@@ -311,9 +359,7 @@ const EstimatePage = () => {
             {Array.from({ length: totalSteps }).map((_, i) => (
               <div
                 key={i}
-                className={`h-1.5 rounded-full flex-1 transition-colors ${
-                  i <= step ? "bg-accent" : "bg-border"
-                }`}
+                className={`h-1.5 rounded-full flex-1 transition-colors ${i <= step ? "bg-accent" : "bg-border"}`}
               />
             ))}
           </div>
@@ -510,6 +556,10 @@ const EstimatePage = () => {
                           <div className="font-display text-xl font-bold text-foreground">${monthlyTotal.toLocaleString()}/mo</div>
                         </div>
                       )}
+                      <div className="flex items-center gap-2 p-3 rounded-xl bg-accent/5 border border-accent/10">
+                        <Sparkles className="w-4 h-4 text-accent shrink-0" />
+                        <p className="text-xs text-muted-foreground">An AI-powered strategy recommendation will be generated for your business when you submit.</p>
+                      </div>
                     </div>
                   </div>
                 )}
