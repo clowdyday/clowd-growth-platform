@@ -14,8 +14,8 @@ serve(async (req) => {
   try {
     const { feature, context } = await req.json();
 
-    const openaiKey = Deno.env.get("OPENAI_API_KEY");
-    if (!openaiKey) throw new Error("OpenAI API key not configured");
+    const geminiKey = Deno.env.get("GEMINI_API_KEY");
+    if (!geminiKey) throw new Error("Gemini API key not configured. Please add GEMINI_API_KEY in Supabase Edge Function secrets.");
 
     let systemPrompt = "";
     let userPrompt = "";
@@ -160,26 +160,31 @@ serve(async (req) => {
         throw new Error("Unknown feature requested");
     }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${openaiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
-        ],
-        max_tokens: 1500,
-        temperature: 0.7,
-      }),
-    });
+    // Combine system and user prompts for Gemini (it uses a single "contents" format)
+    const fullPrompt = `${systemPrompt}\n\n${userPrompt}`;
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: fullPrompt }] }],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 1500,
+          },
+        }),
+      }
+    );
 
     const data = await response.json();
-    const result = data.choices?.[0]?.message?.content;
 
+    if (!response.ok) {
+      throw new Error(data?.error?.message || "Gemini API error");
+    }
+
+    const result = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!result) throw new Error("No response from AI");
 
     return new Response(JSON.stringify({ result }), {
