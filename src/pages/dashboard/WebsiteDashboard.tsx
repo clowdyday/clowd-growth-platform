@@ -122,7 +122,7 @@ const WebsiteDashboard = () => {
         />
       )}
 
-      {/* AI Website Copy Generator */}
+      {/* Website Copy Generator */}
       <div className="glass-card border border-secondary/20 overflow-hidden">
         <button
           type="button"
@@ -134,7 +134,7 @@ const WebsiteDashboard = () => {
               <Sparkles className="w-5 h-5 text-secondary" />
             </div>
             <div className="text-left">
-              <div className="font-display font-bold text-foreground">AI Website Copy Generator</div>
+              <div className="font-display font-bold text-foreground">Website Copy Generator</div>
               <div className="text-xs text-muted-foreground">Generate full website copy — hero, about, services, CTAs — ready to hand off</div>
             </div>
           </div>

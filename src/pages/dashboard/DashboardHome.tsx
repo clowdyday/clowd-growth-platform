@@ -169,7 +169,7 @@ const DashboardHome = () => {
         </div>
       )}
 
-      {/* AI Strategy Brief Generator — only show when at least one service exists */}
+      {/* Strategy Brief — only show when at least one service exists */}
       {services.length > 0 && (
         <div className="glass-card border border-accent/20 overflow-hidden">
           <button
@@ -183,7 +183,7 @@ const DashboardHome = () => {
               </div>
               <div className="text-left">
                 <div className="flex items-center gap-2">
-                  <div className="font-display font-bold text-foreground">AI Strategy Brief</div>
+                  <div className="font-display font-bold text-foreground">Strategy Brief</div>
                   <span className="text-[10px] font-bold tracking-wider uppercase bg-accent/20 text-accent px-2 py-0.5 rounded-full">New</span>
                 </div>
                 <div className="text-xs text-muted-foreground">Generate a personalized 90-day marketing strategy brief for your business</div>

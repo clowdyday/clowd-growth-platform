@@ -120,7 +120,7 @@ const OrganicDashboard = () => {
         />
       )}
 
-      {/* AI Content Calendar Generator */}
+      {/* Content Calendar */}
       <div className="glass-card border border-green-400/20 overflow-hidden">
         <button
           type="button"
@@ -132,7 +132,7 @@ const OrganicDashboard = () => {
               <Sparkles className="w-5 h-5 text-green-400" />
             </div>
             <div className="text-left">
-              <div className="font-display font-bold text-foreground">AI Content Calendar Generator</div>
+              <div className="font-display font-bold text-foreground">Content Calendar</div>
               <div className="text-xs text-muted-foreground">Generate a 2-week social media content calendar with full captions and hashtags</div>
             </div>
           </div>

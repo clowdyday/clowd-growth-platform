@@ -15,9 +15,9 @@ interface AIOnboardingAssistantProps {
 }
 
 const WELCOME_MESSAGES: Record<string, string> = {
-  ads: "Hi! I'm your AI marketing assistant. I can help you fill out your ad campaign onboarding — just ask me anything about your target audience, budget, goals, or what to enter in any field.",
-  website: "Hi! I'm your AI assistant for your website project. Ask me anything — what to write for your tagline, how to describe your services, or what makes a great website brief.",
-  organic: "Hi! I'm your AI social media assistant. I can help you define your brand voice, suggest content pillars, or explain what any field means. Just ask!",
+  ads: "Hi! I'm your Clowd Marketing onboarding assistant. I can help you fill out your ad campaign onboarding — just ask me anything about your target audience, budget, goals, or what to enter in any field.",
+  website: "Hi! I'm your Clowd Marketing onboarding assistant. Ask me anything — what to write for your tagline, how to describe your services, or what makes a great website brief.",
+  organic: "Hi! I'm your Clowd Marketing onboarding assistant. I can help you define your brand voice, suggest content pillars, or explain what any field means. Just ask!",
 };
 
 export const AIOnboardingAssistant = ({
@@ -119,7 +119,7 @@ export const AIOnboardingAssistant = ({
             className={`fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-2xl ${accentBg} text-black font-semibold text-sm shadow-lg hover:opacity-90 transition-opacity`}
           >
             <Sparkles className="w-4 h-4" />
-            Ask AI Assistant
+            Onboarding Assistant
           </motion.button>
         )}
       </AnimatePresence>
@@ -142,8 +142,8 @@ export const AIOnboardingAssistant = ({
                   <Sparkles className="w-4 h-4 text-black" />
                 </div>
                 <div>
-                  <div className="font-display font-bold text-foreground text-sm">AI Assistant</div>
-                  <div className="text-[10px] text-muted-foreground">Here to help with your onboarding</div>
+                  <div className="font-display font-bold text-foreground text-sm">Onboarding Assistant</div>
+                  <div className="text-[10px] text-muted-foreground">Clowd Marketing — here to help</div>
                 </div>
               </div>
               <button

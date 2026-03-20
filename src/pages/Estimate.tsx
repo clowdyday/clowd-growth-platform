@@ -283,7 +283,7 @@ const EstimatePage = () => {
               </p>
             </div>
 
-            {/* AI Strategy Recommendation */}
+            {/* Strategy Recommendation */}
             <div className="glass-card p-8 border border-accent/20">
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-3">
@@ -291,7 +291,7 @@ const EstimatePage = () => {
                     <Sparkles className="w-5 h-5 text-accent" aria-hidden="true" />
                   </div>
                   <div>
-                    <h2 className="font-display text-lg font-bold text-foreground">AI Strategy Recommendation</h2>
+                    <h2 className="font-display text-lg font-bold text-foreground">Your Strategy Recommendation</h2>
                     <p className="text-xs text-muted-foreground">Personalized for {form.companyName}</p>
                   </div>
                 </div>

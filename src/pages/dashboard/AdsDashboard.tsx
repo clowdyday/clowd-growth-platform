@@ -118,7 +118,7 @@ const AdsDashboard = () => {
         />
       )}
 
-      {/* AI Ad Copy Generator */}
+      {/* Ad Copy Generator */}
       <div className="glass-card border border-accent/20 overflow-hidden">
         <button
           type="button"
@@ -130,7 +130,7 @@ const AdsDashboard = () => {
               <Sparkles className="w-5 h-5 text-accent" />
             </div>
             <div className="text-left">
-              <div className="font-display font-bold text-foreground">AI Ad Copy Generator</div>
+              <div className="font-display font-bold text-foreground">Ad Copy Generator</div>
               <div className="text-xs text-muted-foreground">Generate ready-to-use Google & Meta ad copy for your campaigns</div>
             </div>
           </div>
